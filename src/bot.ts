@@ -1,5 +1,5 @@
 import { Client, ClientOptions, Collection } from 'discord.js';
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 import type { Command } from './types/command';
 
 export class ModmailClient extends Client {

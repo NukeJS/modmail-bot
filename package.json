@@ -6,8 +6,9 @@
   "author": "Ronnie <rwaebers@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon src/index.ts",
-    "start": "node dist/src/index.ts"
+    "start": "node dist/index.js"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

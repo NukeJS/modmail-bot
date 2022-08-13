@@ -24,7 +24,7 @@ cp .env.example .env
 
 Update the values accordingly.
 
-## Usage
+## Development
 
 Start the bot:
 
@@ -34,6 +34,28 @@ yarn dev
 
 # npm
 npm run dev
+```
+
+## Production
+
+Build the bot for production:
+
+```sh
+# yarn
+yarn build
+
+# npm
+npm run build
+```
+
+Start the bot:
+
+```sh
+# yarn
+yarn start
+
+# npm
+npm run start
 ```
 
 ---
