@@ -6,7 +6,7 @@
   "author": "Ronnie <rwaebers@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./dist && tsc",
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js"
   },
