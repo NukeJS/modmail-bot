@@ -3,8 +3,8 @@ import fs from 'fs-extra';
 import type { Command } from './types/command';
 
 export class ModmailClient extends Client {
-  private commands: Collection<string, Command>;
-  private aliases: Collection<string, string>;
+  commands: Collection<string, Command>;
+  aliases: Collection<string, string>;
 
   constructor(options: ClientOptions) {
     super(options);
