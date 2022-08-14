@@ -26,6 +26,18 @@ Update the values accordingly.
 
 ## Development
 
+Migrating the database:
+
+```sh
+npx prisma migrate dev
+```
+
+Need to reset the database?:
+
+```sh
+npx prisma migrate reset
+```
+
 Start the bot:
 
 ```sh
@@ -37,6 +49,12 @@ npm run dev
 ```
 
 ## Production
+
+Migrating the database:
+
+```sh
+npx prisma migrate deploy
+```
 
 Build the bot for production:
 
@@ -60,4 +78,4 @@ npm run start
 
 ---
 
-© 2022 | MIT License
+© 2022 - NukeJS | MIT License

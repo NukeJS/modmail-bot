@@ -19,8 +19,8 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       client.commands.get(client.aliases.get(cmd.toLowerCase())!);
     if (!command || command.disabled) return;
 
-    // TODO: Check if channel is a thread
-    if (command.permissions?.threadOnly) {
+    // TODO: Check if channel is a ticket
+    if (command.permissions?.ticketOnly) {
       return;
     }
 

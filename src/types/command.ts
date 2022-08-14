@@ -24,9 +24,9 @@ export interface Command {
    */
   permissions?: {
     /**
-     * If `true`, command can only be used in a thread
+     * If `true`, command can only be used inside a ticket channel
      */
-    threadOnly?: boolean;
+    ticketOnly?: boolean;
   };
   /**
    * Run function
