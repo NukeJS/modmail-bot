@@ -8,11 +8,17 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
   /**
    * Handle DM Message
+   * - Check if user is blocked. If so, do nothing
    * - Create a new ticket channel if a ticket with the userId doesn't exist
    * - Create a new ticket to store in the database
    * - Send the welcome message to the user
    */
   if (message.channel instanceof DMChannel) {
+    const blockedUser = client.blockedUsers.find(
+      (_blockedUser) => _blockedUser.userId === message.author.id,
+    );
+    if (blockedUser) return;
+
     let ticket = client.tickets.find((_ticket) => _ticket.userId === message.author.id);
     if (!ticket) {
       const createdTicketChannel = await client.inboxGuild.channels.create({

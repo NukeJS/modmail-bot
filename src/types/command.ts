@@ -1,8 +1,9 @@
 import type { Ticket } from '@prisma/client';
-import type { Client, Message } from 'discord.js';
+import type { Message } from 'discord.js';
+import type { ModmailClient } from '../bot';
 
 export interface CommandContext {
-  client: Client;
+  client: ModmailClient;
   message: Message;
   args: string[];
   ticket: Ticket | undefined;
