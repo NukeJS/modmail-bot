@@ -11,7 +11,26 @@ datasource db {
 }
 
 model Ticket {
-  id        Int    @id @default(autoincrement())
-  userId    String
-  channelId String
+  id             Int             @id @default(autoincrement())
+  userId         String
+  channelId      String
+  ticketMessages TicketMessage[]
+}
+
+model TicketMessage {
+  id       Int    @id @default(autoincrement())
+  userId   String
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  ticketId Int
+}
+
+model Snippet {
+  id      Int    @id @default(autoincrement())
+  name    String
+  content String
+}
+
+model BlockedUser {
+  id     Int    @id @default(autoincrement())
+  userId String
 }

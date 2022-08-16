@@ -1,16 +1,76 @@
-import { DMChannel, Message } from 'discord.js';
+import { ChannelType, DMChannel, Message, TextChannel } from 'discord.js';
 import type { ModmailClient } from '../bot';
+import { prisma } from '../db';
+import { formatTicketMessage } from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.author.bot || message.guildId === process.env.MAIN_SERVER_ID) return;
 
+  /**
+   * Handle DM Message
+   * - Create a new ticket channel if a ticket with the userId doesn't exist
+   * - Create a new ticket to store in the database
+   * - Send the welcome message to the user
+   */
   if (message.channel instanceof DMChannel) {
-    // Is DM, handle this
+    let ticket = client.tickets.find((_ticket) => _ticket.userId === message.author.id);
+    if (!ticket) {
+      const createdTicketChannel = await client.inboxGuild.channels.create({
+        name: `ticket-${message.author.id}`,
+        type: ChannelType.GuildText,
+        topic: `Ticket channel for user: "${message.author.tag}", ID: "${message.author.id}".`,
+        reason: `Created ticket channel for user: "${message.author.tag}".`,
+      });
+      ticket = await prisma.ticket.create({
+        data: {
+          userId: message.author.id,
+          channelId: createdTicketChannel.id,
+        },
+      });
+      client.tickets.set(ticket.id, ticket);
+      if (process.env.RESPONSE_MESSAGE) await message.channel.send(process.env.RESPONSE_MESSAGE);
+    }
+
+    /**
+     * Send the message from the user in the inbox ticket channel
+     * TODO: Handle attachments?
+     */
+    const ticketChannel = client.inboxGuild.channels.cache.get(ticket.channelId);
+    if (ticketChannel instanceof TextChannel) {
+      if (message.content.length) {
+        ticketChannel.send(formatTicketMessage(message));
+      }
+      if (message.attachments.size) {
+        ticketChannel.send({ files: [...message.attachments.values()] });
+      }
+    }
+
     return;
   }
 
+  /**
+   * Handle message sent in the inbox guild
+   * - Check if channel is a ticket
+   * - If ticket channel, send message only if it doesn't start with the prefix
+   * - Else, run command
+   */
   if (message.guildId === process.env.INBOX_SERVER_ID) {
-    if (!message.content.startsWith(process.env.PREFIX!)) return;
+    const ticket = client.tickets.find((_ticket) => _ticket.channelId === message.channelId);
+
+    if (ticket) {
+      if (!message.content.startsWith(process.env.PREFIX!)) {
+        const user = client.users.cache.get(ticket.userId);
+        if (!user) return;
+
+        if (message.content.length) {
+          await user.send(message.content);
+        }
+        if (message.attachments.size) {
+          await user.send({ files: [...message.attachments.values()] });
+        }
+        return;
+      }
+    }
 
     const [cmd, ...args] = message.content.trim().slice(process.env.PREFIX?.length).split(/ +/g);
 
@@ -20,12 +80,13 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     if (!command || command.disabled) return;
 
     // TODO: Check if channel is a ticket
-    if (command.permissions?.ticketOnly) {
+    if (command.permissions?.ticketChannelOnly && !ticket) {
+      await message.reply('This command only works inside of a ticket channel.');
       return;
     }
 
     try {
-      await command.run({ client, message, args });
+      await command.run({ client, message, args, ticket });
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
