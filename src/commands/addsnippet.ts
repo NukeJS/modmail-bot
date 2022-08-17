@@ -49,7 +49,7 @@ const addSnippetCommand: Command = {
     await message.reply({
       embeds: [
         createSimpleEmbed(`Snippet "${name}" has successfully been created.`, {
-          type: 'danger',
+          type: 'success',
         }),
       ],
     });
