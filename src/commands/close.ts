@@ -6,12 +6,12 @@ const closeCommand: Command = {
   aliases: ['c'],
   permissions: {
     ticketChannelOnly: true,
+    allowInArchivedTicketChannel: true,
   },
   run: async ({ client, message, ticket }) => {
     if (!ticket) return;
 
     const user = await client.users.fetch(ticket.userId);
-    if (!user) return;
 
     await message.reply({
       embeds: [
@@ -21,15 +21,16 @@ const closeCommand: Command = {
       ],
     });
     await Promise.all([
-      user.send({
-        embeds: [
-          createSimpleEmbed('Feel free to open a new one by sending me a message.', {
-            title: 'Ticket Closed',
-            type: 'info',
-          }),
-        ],
-      }),
       message.channel.delete(),
+      !ticket.isArchived &&
+        user?.send({
+          embeds: [
+            createSimpleEmbed('Feel free to open a new one by sending me a message.', {
+              title: 'Ticket Closed',
+              type: 'info',
+            }),
+          ],
+        }),
     ]);
   },
 };

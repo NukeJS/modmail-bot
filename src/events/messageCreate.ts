@@ -19,7 +19,9 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     );
     if (blockedUser) return;
 
-    let ticket = client.tickets.find((_ticket) => _ticket.userId === message.author.id);
+    let ticket = client.tickets.find(
+      (_ticket) => _ticket.userId === message.author.id && !_ticket.isArchived,
+    );
     if (!ticket) {
       const createdTicketChannel = await client.inboxGuild.channels.create({
         name: `ticket-${message.author.id}`,
@@ -71,7 +73,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.guildId === process.env.INBOX_SERVER_ID) {
     const ticket = client.tickets.find((_ticket) => _ticket.channelId === message.channelId);
 
-    if (ticket) {
+    if (ticket && !ticket.isArchived) {
       if (!message.content.startsWith(process.env.PREFIX!)) {
         const user = client.users.cache.get(ticket.userId);
         if (!user) return;
@@ -98,6 +100,17 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       await message.reply({
         embeds: [
           createSimpleEmbed('This command only works inside of a ticket channel.', {
+            type: 'info',
+          }),
+        ],
+      });
+      return;
+    }
+
+    if (!command.permissions?.allowInArchivedTicketChannel && ticket?.isArchived) {
+      await message.reply({
+        embeds: [
+          createSimpleEmbed("This command doesn't work in archived ticket channels.", {
             type: 'info',
           }),
         ],

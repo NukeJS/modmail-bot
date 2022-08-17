@@ -30,6 +30,7 @@ export interface Command {
      * If `true`, command can only be used inside a ticket channel
      */
     ticketChannelOnly?: boolean;
+    allowInArchivedTicketChannel?: boolean;
   };
   /**
    * Run function

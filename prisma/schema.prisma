@@ -14,6 +14,7 @@ model Ticket {
   id            Int             @id @default(autoincrement())
   userId        String
   channelId     String
+  isArchived    Boolean         @default(false)
   TicketMessage TicketMessage[]
 }
 
