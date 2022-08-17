@@ -1,13 +1,19 @@
 import { prisma } from '../db';
 import type { Command } from '../types/command';
-import { getUserByMentionOrId } from '../utils';
+import { createSimpleEmbed, getUserByMentionOrId } from '../utils';
 
 const unblockCommand: Command = {
   name: 'unblock',
   run: async ({ client, message, args, ticket }) => {
-    const user = await getUserByMentionOrId(message, args);
+    const user = await getUserByMentionOrId({ message, args, ticket });
     if (!ticket && !user) {
-      await message.reply('User not found.');
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('User not found.', {
+            type: 'danger',
+          }),
+        ],
+      });
       return;
     }
 
@@ -15,7 +21,13 @@ const unblockCommand: Command = {
       (_blockedUser) => _blockedUser.userId === user?.id || _blockedUser.userId === ticket?.userId,
     );
     if (!existingBlockedUser) {
-      await message.reply('User is not blocked.');
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('User is not blocked.', {
+            type: 'danger',
+          }),
+        ],
+      });
       return;
     }
 
@@ -25,7 +37,13 @@ const unblockCommand: Command = {
           id: existingBlockedUser.id,
         },
       }),
-      message.reply('User has been unblocked.'),
+      message.reply({
+        embeds: [
+          createSimpleEmbed('User has been unblocked.', {
+            type: 'success',
+          }),
+        ],
+      }),
     ]);
     client.blockedUsers.delete(existingBlockedUser.id);
   },

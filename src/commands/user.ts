@@ -1,4 +1,5 @@
 import { formatDistance } from 'date-fns';
+import { Colors } from 'discord.js';
 import type { Command } from '../types/command';
 
 const userCommand: Command = {
@@ -16,6 +17,7 @@ const userCommand: Command = {
     await message.reply({
       embeds: [
         {
+          color: Colors.Blurple,
           author: {
             icon_url: user.avatarURL({ size: 32 }) || undefined,
             name: user.tag,

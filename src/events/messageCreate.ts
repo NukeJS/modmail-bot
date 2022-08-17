@@ -1,7 +1,7 @@
 import { ChannelType, DMChannel, Message, TextChannel } from 'discord.js';
 import type { ModmailClient } from '../bot';
 import { prisma } from '../db';
-import { formatTicketMessage } from '../utils';
+import { createSimpleEmbed, formatTicketMessage } from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.author.bot || message.guildId === process.env.MAIN_SERVER_ID) return;
@@ -34,7 +34,15 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
         },
       });
       client.tickets.set(ticket.id, ticket);
-      if (process.env.RESPONSE_MESSAGE) await message.channel.send(process.env.RESPONSE_MESSAGE);
+      if (process.env.RESPONSE_MESSAGE) {
+        await message.channel.send({
+          embeds: [
+            createSimpleEmbed(process.env.RESPONSE_MESSAGE, {
+              type: 'info',
+            }),
+          ],
+        });
+      }
     }
 
     /**
@@ -87,7 +95,13 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
     // TODO: Check if channel is a ticket
     if (command.permissions?.ticketChannelOnly && !ticket) {
-      await message.reply('This command only works inside of a ticket channel.');
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('This command only works inside of a ticket channel.', {
+            type: 'info',
+          }),
+        ],
+      });
       return;
     }
 
@@ -97,7 +111,13 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       // eslint-disable-next-line no-console
       console.error(error);
 
-      await message.channel.send('An error occurred while trying to run the command.');
+      await message.channel.send({
+        embeds: [
+          createSimpleEmbed('An error occurred while trying to run the command.', {
+            type: 'danger',
+          }),
+        ],
+      });
     }
   }
 };

@@ -1,4 +1,5 @@
 import type { Command } from '../types/command';
+import { createSimpleEmbed } from '../utils';
 
 const closeCommand: Command = {
   name: 'close',
@@ -12,11 +13,22 @@ const closeCommand: Command = {
     const user = await client.users.fetch(ticket.userId);
     if (!user) return;
 
-    await message.reply('Closing ticket...');
+    await message.reply({
+      embeds: [
+        createSimpleEmbed('Closing ticket...', {
+          type: 'info',
+        }),
+      ],
+    });
     await Promise.all([
-      user.send(
-        '**TICKET CLOSED**\nThis ticket is now closed. Feel free to open a new one by sending me a message!',
-      ),
+      user.send({
+        embeds: [
+          createSimpleEmbed('Feel free to open a new one by sending me a message.', {
+            title: 'Ticket Closed',
+            type: 'info',
+          }),
+        ],
+      }),
       message.channel.delete(),
     ]);
   },

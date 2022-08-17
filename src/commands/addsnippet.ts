@@ -1,22 +1,41 @@
 import { prisma } from '../db';
 import type { Command } from '../types/command';
+import { createSimpleEmbed } from '../utils';
 
 const addSnippetCommand: Command = {
   name: 'addsnippet',
   aliases: ['+snippet', '+s'],
   run: async ({ client, message, args: [name, ...content] }) => {
-    if (!name.length) {
-      await message.reply('A snippet must have a name.');
+    if (!name?.length) {
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('A snippet must have a name.', {
+            type: 'danger',
+          }),
+        ],
+      });
       return;
     }
     if (!content.length) {
-      await message.reply('A snippet must have content.');
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('A snippet must have content.', {
+            type: 'danger',
+          }),
+        ],
+      });
       return;
     }
 
     const existingSnippet = client.snippets.find((_snippet) => _snippet.name === name);
     if (existingSnippet) {
-      await message.reply('A snippet with that name already exists.');
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('A snippet with that name already exists.', {
+            type: 'danger',
+          }),
+        ],
+      });
       return;
     }
 
@@ -27,7 +46,13 @@ const addSnippetCommand: Command = {
       },
     });
     client.snippets.set(snippet.id, snippet);
-    await message.reply(`Snippet "${name}" has successfully been created.`);
+    await message.reply({
+      embeds: [
+        createSimpleEmbed(`Snippet "${name}" has successfully been created.`, {
+          type: 'danger',
+        }),
+      ],
+    });
   },
 };
 
