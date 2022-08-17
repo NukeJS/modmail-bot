@@ -1,18 +1,27 @@
 import { formatDistance } from 'date-fns';
 import { Colors } from 'discord.js';
 import type { Command } from '../types/command';
+import { createSimpleEmbed, getUserByMentionOrId } from '../utils';
 
 const userCommand: Command = {
   name: 'user',
   aliases: ['u'],
-  permissions: {
-    ticketChannelOnly: true,
-  },
-  run: async ({ client, message, ticket }) => {
-    if (!ticket) return;
+  run: async ({ message, args, ticket }) => {
+    let user = await getUserByMentionOrId({ message, args, ticket });
+    if (args.length && !user) {
+      await message.reply({
+        embeds: [
+          createSimpleEmbed('User not found.', {
+            type: 'danger',
+          }),
+        ],
+      });
+      return;
+    }
 
-    const user = await client.users.fetch(ticket.userId);
-    if (!user) return;
+    if (!user) {
+      user = message.author;
+    }
 
     await message.reply({
       embeds: [
