@@ -47,10 +47,6 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       }
     }
 
-    /**
-     * Send the message from the user in the inbox ticket channel
-     * TODO: Handle attachments?
-     */
     const ticketChannel = await client.inboxGuild.channels.fetch(ticket.channelId);
     if (ticketChannel instanceof TextChannel) {
       if (message.content.length) {
@@ -95,7 +91,6 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       client.commands.get(client.aliases.get(cmd.toLowerCase())!);
     if (!command || command.disabled) return;
 
-    // TODO: Check if channel is a ticket
     if (command.permissions?.ticketChannelOnly && !ticket) {
       await message.reply({
         embeds: [
