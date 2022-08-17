@@ -1,6 +1,6 @@
 import type { Command } from '../types/command';
 
-const close: Command = {
+const closeCommand: Command = {
   name: 'close',
   aliases: ['c'],
   permissions: {
@@ -9,7 +9,7 @@ const close: Command = {
   run: async ({ client, message, ticket }) => {
     if (!ticket) return;
 
-    const user = client.users.cache.get(ticket.userId);
+    const user = await client.users.fetch(ticket.userId);
     if (!user) return;
 
     await message.reply('Closing ticket...');
@@ -22,4 +22,4 @@ const close: Command = {
   },
 };
 
-export default close;
+export default closeCommand;

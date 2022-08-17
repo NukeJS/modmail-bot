@@ -41,13 +41,13 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
      * Send the message from the user in the inbox ticket channel
      * TODO: Handle attachments?
      */
-    const ticketChannel = client.inboxGuild.channels.cache.get(ticket.channelId);
+    const ticketChannel = await client.inboxGuild.channels.fetch(ticket.channelId);
     if (ticketChannel instanceof TextChannel) {
       if (message.content.length) {
-        ticketChannel.send(formatTicketMessage(message));
+        await ticketChannel.send(formatTicketMessage(message));
       }
       if (message.attachments.size) {
-        ticketChannel.send({ files: [...message.attachments.values()] });
+        await ticketChannel.send({ files: [...message.attachments.values()] });
       }
     }
 

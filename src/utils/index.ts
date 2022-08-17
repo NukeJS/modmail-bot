@@ -1,3 +1,3 @@
 export * from './getInboxGuild';
 export * from './formatTicketMessage';
-export * from './getMentionedUserOrId';
+export * from './getUserByMentionOrId';
