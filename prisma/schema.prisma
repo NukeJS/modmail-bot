@@ -11,10 +11,10 @@ datasource db {
 }
 
 model Ticket {
-  id             Int             @id @default(autoincrement())
-  userId         String
-  channelId      String
-  ticketMessages TicketMessage[]
+  id            Int             @id @default(autoincrement())
+  userId        String
+  channelId     String
+  TicketMessage TicketMessage[]
 }
 
 model TicketMessage {
@@ -24,13 +24,13 @@ model TicketMessage {
   ticketId Int
 }
 
+model BlockedUser {
+  id     Int    @id @default(autoincrement())
+  userId String
+}
+
 model Snippet {
   id      Int    @id @default(autoincrement())
   name    String
   content String
-}
-
-model BlockedUser {
-  id     Int    @id @default(autoincrement())
-  userId String
 }

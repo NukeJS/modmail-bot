@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE `TicketMessage` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` VARCHAR(191) NOT NULL,
     `ticketId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
