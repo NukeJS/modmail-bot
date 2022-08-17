@@ -1,20 +1,20 @@
 import { prisma } from '../db';
 import type { Command } from '../types/command';
-import { getMentionedUserOrId } from '../utils';
+import { getUserByMentionOrId } from '../utils';
 
-const unblock: Command = {
+const unblockCommand: Command = {
   name: 'unblock',
   run: async ({ client, message, args, ticket }) => {
-    const user = getMentionedUserOrId(message, args);
-    if (args.length && !user) {
+    const user = await getUserByMentionOrId(message, args);
+    if (!ticket && !user) {
       await message.reply('User not found.');
       return;
     }
 
-    const blockedUser = client.blockedUsers.find(
+    const existingBlockedUser = client.blockedUsers.find(
       (_blockedUser) => _blockedUser.userId === user?.id || _blockedUser.userId === ticket?.userId,
     );
-    if (!blockedUser) {
+    if (!existingBlockedUser) {
       await message.reply('User is not blocked.');
       return;
     }
@@ -22,13 +22,13 @@ const unblock: Command = {
     await Promise.all([
       prisma.blockedUser.delete({
         where: {
-          id: blockedUser.id,
+          id: existingBlockedUser.id,
         },
       }),
       message.reply('User has been unblocked.'),
     ]);
-    client.blockedUsers.delete(blockedUser.id);
+    client.blockedUsers.delete(existingBlockedUser.id);
   },
 };
 
-export default unblock;
+export default unblockCommand;

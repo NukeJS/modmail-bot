@@ -1,15 +1,15 @@
-import type { BlockedUser, Ticket } from '@prisma/client';
+import type { BlockedUser, Snippet, Ticket } from '@prisma/client';
 import { Client, ClientOptions, Collection, Guild } from 'discord.js';
 import fs from 'fs-extra';
 import { prisma } from './db';
 import type { Command } from './types/command';
-import { getInboxGuild } from './utils';
 
 export class ModmailClient extends Client {
   commands: Collection<string, Command>;
   aliases: Collection<string, string>;
   tickets: Collection<Ticket['id'], Ticket>;
   blockedUsers: Collection<BlockedUser['id'], BlockedUser>;
+  snippets: Collection<Snippet['id'], Snippet>;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   inboxGuild: Guild;
@@ -20,6 +20,7 @@ export class ModmailClient extends Client {
     this.aliases = new Collection();
     this.tickets = new Collection();
     this.blockedUsers = new Collection();
+    this.snippets = new Collection();
 
     this.init();
     this.loadCommands();
@@ -58,15 +59,6 @@ export class ModmailClient extends Client {
   }
 
   private async init() {
-    this.on('ready', () => {
-      const inboxGuild = getInboxGuild();
-      if (!inboxGuild) {
-        throw new Error('Bot is not inside of inbox guild.');
-      }
-
-      this.inboxGuild = inboxGuild;
-    });
-
     const tickets = await prisma.ticket.findMany();
     // eslint-disable-next-line no-param-reassign
     this.tickets = new Collection(tickets.map((ticket) => [ticket.id, ticket]));
@@ -76,5 +68,9 @@ export class ModmailClient extends Client {
     this.blockedUsers = new Collection(
       blockedUsers.map((blockedUser) => [blockedUser.id, blockedUser]),
     );
+
+    const snippets = await prisma.snippet.findMany();
+    // eslint-disable-next-line no-param-reassign
+    this.snippets = new Collection(snippets.map((snippet) => [snippet.id, snippet]));
   }
 }
