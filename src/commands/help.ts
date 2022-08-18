@@ -76,7 +76,7 @@ const helpCommand: Command = {
 
     if (command.examples?.length) {
       commandEmbed.fields?.push({
-        name: 'Examples',
+        name: 'Example',
         value: [
           !command.argsRequired && `\`${process.env.PREFIX}${command.name}\``,
           command.examples
