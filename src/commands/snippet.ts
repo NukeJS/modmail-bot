@@ -4,6 +4,10 @@ import { createSimpleEmbed } from '../utils';
 const snippetCommand: Command = {
   name: 'snippet',
   aliases: ['s'],
+  description: 'Sends the content of the specified snippet to the user.',
+  argsRequired: true,
+  usages: ['<name>'],
+  examples: ['test'],
   permissions: {
     ticketChannelOnly: true,
   },

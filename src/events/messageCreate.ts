@@ -89,7 +89,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     const command =
       client.commands.get(cmd.toLowerCase()) ||
       client.commands.get(client.aliases.get(cmd.toLowerCase())!);
-    if (!command || command.disabled) return;
+    if (!command) return;
 
     if (command.permissions?.ticketChannelOnly && !ticket) {
       await message.reply({

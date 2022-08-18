@@ -5,6 +5,10 @@ import { createSimpleEmbed } from '../utils';
 const deleteSnippetCommand: Command = {
   name: 'deletesnippet',
   aliases: ['-snippet', '-s'],
+  description: 'Delete a snippet.',
+  argsRequired: true,
+  usages: ['<name>'],
+  examples: ['test'],
   run: async ({ client, message, args: [name] }) => {
     if (!name?.length) {
       await message.reply({

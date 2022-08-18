@@ -4,6 +4,10 @@ import { createSimpleEmbed } from '../utils';
 const previewSnippetCommand: Command = {
   name: 'previewsnippet',
   aliases: ['ps'],
+  description: 'Preview a snippet without sending it to the user.',
+  argsRequired: true,
+  usages: ['<name>'],
+  examples: ['test'],
   run: async ({ client, message, args: [name] }) => {
     if (!name?.length) {
       await message.reply({

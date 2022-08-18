@@ -4,6 +4,10 @@ import { createSimpleEmbed, getUserByMentionOrId } from '../utils';
 
 const unblockCommand: Command = {
   name: 'unblock',
+  description: 'Unblock a user.',
+  argsRequired: true,
+  usages: ['(user)', '(user id)'],
+  examples: ['@Nuke#9476', '237878725130059777'],
   run: async ({ client, message, args, ticket }) => {
     const user = await getUserByMentionOrId({ message, args, ticket });
     if (!ticket && !user) {

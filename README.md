@@ -4,7 +4,6 @@ A Discord modmail bot made with Discord.js
 
 ## Todos
 
-- [ ] Add help command
 - [ ] Assign unarchived tickets to a category
 - [ ] Assign archived tickets to a category
 

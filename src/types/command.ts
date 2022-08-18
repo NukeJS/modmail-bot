@@ -19,9 +19,21 @@ export interface Command {
    */
   aliases?: string[];
   /**
-   * If true, command can't be used
+   * Description of the command
    */
-  disabled?: boolean;
+  description: string;
+  /**
+   * Usages of the command
+   */
+  usages?: string[];
+  /**
+   * Usage examples of the command
+   */
+  examples?: string[];
+  /**
+   * Whether or not arguments are required for the command
+   */
+  argsRequired?: boolean;
   /**
    * Permissions object
    */

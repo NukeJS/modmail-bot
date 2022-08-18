@@ -3,6 +3,7 @@ import { createSimpleEmbed } from '../utils';
 
 const snippetsCommand: Command = {
   name: 'snippets',
+  description: 'Lists all available snippets.',
   run: async ({ client, message }) => {
     await message.reply({
       embeds: [

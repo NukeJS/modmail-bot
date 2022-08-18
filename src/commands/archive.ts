@@ -4,6 +4,7 @@ import { createSimpleEmbed } from '../utils';
 
 const archiveCommand: Command = {
   name: 'archive',
+  description: 'Archive the ticket where the command is used.',
   permissions: {
     ticketChannelOnly: true,
   },

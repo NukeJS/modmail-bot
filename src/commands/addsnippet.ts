@@ -5,6 +5,10 @@ import { createSimpleEmbed } from '../utils';
 const addSnippetCommand: Command = {
   name: 'addsnippet',
   aliases: ['+snippet', '+s'],
+  description: 'Create a new snippet.',
+  argsRequired: true,
+  usages: ['<name> <...content>'],
+  examples: ['test This is a test snippet.'],
   run: async ({ client, message, args: [name, ...content] }) => {
     if (!name?.length) {
       await message.reply({

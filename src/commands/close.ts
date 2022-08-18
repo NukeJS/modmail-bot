@@ -4,6 +4,7 @@ import { createSimpleEmbed } from '../utils';
 const closeCommand: Command = {
   name: 'close',
   aliases: ['c'],
+  description: 'Close the ticket where the command is used.',
   permissions: {
     ticketChannelOnly: true,
     allowInArchivedTicketChannel: true,
