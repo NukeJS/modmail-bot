@@ -12,7 +12,7 @@ export const sendDirectMessage = async (
     await messageByAuthor.reply({
       embeds: [
         createSimpleEmbed(
-          'Unable to send a DM to this user.\nThey most likely have blocked me. 😢',
+          'Unable to send a DM to this user.\nThey could have blocked me, or have their DMs are turned off.',
           {
             type: 'danger',
           },

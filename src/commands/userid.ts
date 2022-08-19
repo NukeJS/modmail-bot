@@ -25,7 +25,7 @@ const userIdCommand: Command = {
       user = message.author;
     }
 
-    await message.reply(`\`${user.id}\``);
+    await message.reply(`${user.id}`);
   },
 };
 
