@@ -1,6 +1,6 @@
 import { prisma } from '../db';
 import type { Command } from '../types/command';
-import { createSimpleEmbed } from '../utils';
+import { createSimpleEmbed, sendDirectMessage } from '../utils';
 
 const archiveCommand: Command = {
   name: 'archive',
@@ -22,7 +22,7 @@ const archiveCommand: Command = {
           id: ticket.id,
         },
       }),
-      user?.send({
+      sendDirectMessage(message, user, {
         embeds: [
           createSimpleEmbed('Feel free to open a new one by sending me a message.', {
             title: 'Ticket Closed',

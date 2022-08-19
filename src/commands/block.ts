@@ -1,6 +1,6 @@
 import { prisma } from '../db';
 import type { Command } from '../types/command';
-import { createSimpleEmbed, getUserByMentionOrId } from '../utils';
+import { createSimpleEmbed, getUserByMentionOrId, sendDirectMessage } from '../utils';
 
 const blockCommand: Command = {
   name: 'block',
@@ -44,7 +44,7 @@ const blockCommand: Command = {
 
     if (ticket) {
       await Promise.all([
-        user?.send({
+        sendDirectMessage(message, user, {
           embeds: [
             createSimpleEmbed("You've been blocked.", {
               title: 'Ticket Closed',

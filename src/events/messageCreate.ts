@@ -1,7 +1,7 @@
 import { ChannelType, DMChannel, Message, TextChannel } from 'discord.js';
 import type { ModmailClient } from '../bot';
 import { prisma } from '../db';
-import { createSimpleEmbed, formatTicketMessage } from '../utils';
+import { createSimpleEmbed, formatTicketMessage, sendDirectMessage } from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.author.bot || message.guildId === process.env.MAIN_SERVER_ID) return;
@@ -75,10 +75,10 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
         if (!user) return;
 
         if (message.content.length) {
-          await user.send(message.content);
+          await sendDirectMessage(message, user, message.content);
         }
         if (message.attachments.size) {
-          await user.send({ files: [...message.attachments.values()] });
+          await sendDirectMessage(message, user, { files: [...message.attachments.values()] });
         }
         return;
       }

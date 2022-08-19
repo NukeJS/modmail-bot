@@ -1,5 +1,5 @@
 import type { Command } from '../types/command';
-import { createSimpleEmbed } from '../utils';
+import { createSimpleEmbed, sendDirectMessage } from '../utils';
 
 const closeCommand: Command = {
   name: 'close',
@@ -24,7 +24,7 @@ const closeCommand: Command = {
     await Promise.all([
       message.channel.delete(),
       !ticket.isArchived &&
-        user?.send({
+        sendDirectMessage(message, user, {
           embeds: [
             createSimpleEmbed('Feel free to open a new one by sending me a message.', {
               title: 'Ticket Closed',

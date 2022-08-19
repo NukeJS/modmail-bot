@@ -1,5 +1,5 @@
 import type { Command } from '../types/command';
-import { createSimpleEmbed } from '../utils';
+import { createSimpleEmbed, sendDirectMessage } from '../utils';
 
 const snippetCommand: Command = {
   name: 'snippet',
@@ -39,7 +39,10 @@ const snippetCommand: Command = {
     const user = await client.users.fetch(ticket.userId);
     if (!user) return;
 
-    await Promise.all([user.send(snippet.content), message.channel.send(snippet.content)]);
+    await Promise.all([
+      sendDirectMessage(message, user, snippet.content),
+      message.channel.send(snippet.content),
+    ]);
   },
 };
 
