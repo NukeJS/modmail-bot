@@ -29,6 +29,7 @@
     "implicit-arrow-linebreak": "off",
     "consistent-return": "off",
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"]
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-console": "off"
   }
 }
