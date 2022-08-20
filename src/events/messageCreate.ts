@@ -28,6 +28,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
         type: ChannelType.GuildText,
         topic: `Ticket channel for user: "${message.author.tag}", ID: "${message.author.id}".`,
         reason: `Created ticket channel for user: "${message.author.tag}".`,
+        parent: process.env.OPEN_TICKETS_CATEGORY_ID,
       });
       ticket = await prisma.ticket.create({
         data: {

@@ -12,7 +12,6 @@ const onReady = async (client: ModmailClient) => {
   if (!inboxGuild) {
     throw new Error('Bot is not inside of inbox guild.');
   }
-
   // eslint-disable-next-line no-param-reassign
   client.inboxGuild = inboxGuild;
 
