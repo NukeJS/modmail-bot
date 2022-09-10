@@ -10,6 +10,9 @@ const userCommand: Command = {
   aliases: ['u'],
   usages: ['(user)', '(user id)'],
   examples: ['@Nuke#9476', '237878725130059777'],
+  permissions: {
+    allowInArchivedTicketChannel: true,
+  },
   run: async ({ message, args, ticket }) => {
     let user = await getUserByMentionOrId({ message, args, ticket });
     if (args.length && !user) {
@@ -39,6 +42,7 @@ const userCommand: Command = {
             {
               name: 'User ID',
               value: `\`${user.id}\``,
+              inline: true,
             },
             {
               name: 'Account Created',

@@ -13,6 +13,7 @@ const snippetCommand: Command = {
   },
   run: async ({ client, message, args: [name], ticket }) => {
     if (!ticket) return;
+
     if (!name?.length) {
       await message.reply({
         embeds: [

@@ -1,6 +1,6 @@
 import type { ModmailClient } from '../bot';
 import { prisma } from '../db';
-import { getInboxGuild } from '../utils';
+import { getInboxGuild, getMainGuild } from '../utils';
 
 const onReady = async (client: ModmailClient) => {
   const status = process.env.STATUS;
@@ -8,17 +8,22 @@ const onReady = async (client: ModmailClient) => {
     client.user?.setActivity(status);
   }
 
+  const mainGuild = await getMainGuild();
+  if (!mainGuild) {
+    throw new Error('Bot is not inside of main guild.');
+  }
+  client.mainGuild = mainGuild;
+
   const inboxGuild = await getInboxGuild();
   if (!inboxGuild) {
     throw new Error('Bot is not inside of inbox guild.');
   }
-  // eslint-disable-next-line no-param-reassign
   client.inboxGuild = inboxGuild;
 
   const deletedTickets = client.tickets.filter(
     ({ channelId }) => !client.inboxGuild.channels.cache.get(channelId),
   );
-  // eslint-disable-next-line no-param-reassign
+
   client.tickets = client.tickets.filter(
     ({ channelId }) => !!client.inboxGuild.channels.cache.get(channelId),
   );

@@ -10,7 +10,7 @@ const blockCommand: Command = {
   examples: ['@Nuke#9476', '237878725130059777'],
   run: async ({ client, message, args, ticket }) => {
     const user = await getUserByMentionOrId({ message, args, ticket });
-    if (!ticket && !user) {
+    if (!user) {
       await message.reply({
         embeds: [
           createSimpleEmbed('User not found.', {

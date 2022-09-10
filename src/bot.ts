@@ -7,17 +7,22 @@ import type { Command } from './types/command';
 export class ModmailClient extends Client {
   commands: Collection<string, Command>;
   aliases: Collection<string, string>;
+
   tickets: Collection<Ticket['id'], Ticket>;
   blockedUsers: Collection<BlockedUser['id'], BlockedUser>;
   snippets: Collection<Snippet['id'], Snippet>;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
   // @ts-ignore
   inboxGuild: Guild;
+  // @ts-ignore
+  mainGuild: Guild;
 
   constructor(options: ClientOptions) {
     super(options);
+
     this.commands = new Collection();
     this.aliases = new Collection();
+
     this.tickets = new Collection();
     this.blockedUsers = new Collection();
     this.snippets = new Collection();
@@ -60,17 +65,14 @@ export class ModmailClient extends Client {
 
   private async init() {
     const tickets = await prisma.ticket.findMany();
-    // eslint-disable-next-line no-param-reassign
     this.tickets = new Collection(tickets.map((ticket) => [ticket.id, ticket]));
 
     const blockedUsers = await prisma.blockedUser.findMany();
-    // eslint-disable-next-line no-param-reassign
     this.blockedUsers = new Collection(
       blockedUsers.map((blockedUser) => [blockedUser.id, blockedUser]),
     );
 
     const snippets = await prisma.snippet.findMany();
-    // eslint-disable-next-line no-param-reassign
     this.snippets = new Collection(snippets.map((snippet) => [snippet.id, snippet]));
   }
 }

@@ -8,6 +8,9 @@ const userIdCommand: Command = {
   aliases: ['uid'],
   usages: ['(user)'],
   examples: ['@Nuke#9476'],
+  permissions: {
+    allowInArchivedTicketChannel: true,
+  },
   run: async ({ message, args, ticket }) => {
     let user = await getUserByMentionOrId({ message, args, ticket });
     if (args.length && !user) {

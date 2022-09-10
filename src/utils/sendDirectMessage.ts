@@ -1,5 +1,5 @@
-import type { MessagePayload, MessageOptions, User, Message } from 'discord.js';
-import { createSimpleEmbed } from './createSimpleEmbed';
+import type { Message, MessageOptions, MessagePayload, User } from 'discord.js';
+import { createSimpleEmbed } from '.';
 
 export const sendDirectMessage = async (
   messageByAuthor: Message,

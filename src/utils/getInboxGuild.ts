@@ -1,11 +1,11 @@
 import type { Guild } from 'discord.js';
 import { client } from '..';
 
-let inboxGuild: Guild | undefined;
+let inboxGuildCache: Guild | undefined;
 export const getInboxGuild = async () => {
-  if (inboxGuild) return inboxGuild;
+  if (inboxGuildCache) return inboxGuildCache;
 
-  inboxGuild = await client.guilds.fetch(process.env.INBOX_SERVER_ID!);
+  inboxGuildCache = await client.guilds.fetch(process.env.INBOX_SERVER_ID!);
 
-  return inboxGuild;
+  return inboxGuildCache;
 };

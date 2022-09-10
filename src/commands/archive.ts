@@ -39,7 +39,7 @@ const archiveCommand: Command = {
 
     await message.reply({
       embeds: [
-        createSimpleEmbed('You can no longer send messages to the user.', {
+        createSimpleEmbed('You can no longer send messages to this user.', {
           title: 'Ticket Archived',
           type: 'success',
         }),

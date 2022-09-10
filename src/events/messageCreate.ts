@@ -8,22 +8,22 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
   /**
    * Handle DM Message
-   * - Check if user is blocked. If so, do nothing
-   * - Create a new ticket channel if a ticket with the userId doesn't exist
-   * - Create a new ticket to store in the database
-   * - Send the welcome message to the user
+   * - Check if user if blocked. If so, do nothing.
+   * - Check if a ticket exists.
+   *  - No? Create a new channel and ticket, send the default response message to the user.
+   *  - Yes? Send the user's message in the corresponding ticket channel.
    */
   if (message.channel instanceof DMChannel) {
-    const blockedUser = client.blockedUsers.find(
+    const userIsBlocked = !!client.blockedUsers.find(
       (_blockedUser) => _blockedUser.userId === message.author.id,
     );
-    if (blockedUser) return;
+    if (userIsBlocked) return;
 
     let ticket = client.tickets.find(
       (_ticket) => _ticket.userId === message.author.id && !_ticket.isArchived,
     );
     if (!ticket) {
-      const createdTicketChannel = await client.inboxGuild.channels.create({
+      const newTicketChannel = await client.inboxGuild.channels.create({
         name: `ticket-${message.author.id}`,
         type: ChannelType.GuildText,
         topic: `Ticket channel for user: "${message.author.tag}", ID: "${message.author.id}".`,
@@ -33,10 +33,11 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       ticket = await prisma.ticket.create({
         data: {
           userId: message.author.id,
-          channelId: createdTicketChannel.id,
+          channelId: newTicketChannel.id,
         },
       });
       client.tickets.set(ticket.id, ticket);
+
       if (process.env.RESPONSE_MESSAGE) {
         await message.channel.send({
           embeds: [
@@ -63,9 +64,9 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
   /**
    * Handle message sent in the inbox guild
-   * - Check if channel is a ticket
-   * - If ticket channel, send message only if it doesn't start with the prefix
-   * - Else, run command
+   * - Check if the channel where the message has been sent is a ticket channel.
+   *  - Yes? Send the message to the user only if it doesn't start with the prefix.
+   *  - No? Run the command.
    */
   if (message.guildId === process.env.INBOX_SERVER_ID) {
     const ticket = client.tickets.find((_ticket) => _ticket.channelId === message.channelId);
@@ -117,7 +118,6 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     try {
       await command.run({ client, message, args, ticket });
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(error);
 
       await message.channel.send({
