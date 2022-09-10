@@ -50,7 +50,10 @@ const helpCommand: Command = {
 
     let description = `${command.description}\n`;
     if (command.permissions?.ticketChannelOnly) {
-      description += '**Note**: This command can only be used inside of a ticket.\n';
+      description += '- This command can only be used inside of a ticket.\n';
+    }
+    if (command.permissions?.allowInArchivedTicketChannel) {
+      description += '- This command can be used inside of an archived ticket.\n';
     }
     commandEmbed.description = description;
 
