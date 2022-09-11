@@ -21,7 +21,7 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
             title: 'Available Commands',
             type: 'info',
             footer: {
-              text: `Type ${process.env.PREFIX}help (command) for more information.`,
+              text: `Type ${process.env.PREFIX}help (command) for more information about that specific command.`,
             },
           },
         ),
