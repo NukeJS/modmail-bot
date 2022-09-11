@@ -2,14 +2,7 @@ import type { Ticket } from '@prisma/client';
 import type { Message } from 'discord.js';
 import type { ModmailClient } from '../bot';
 
-export interface CommandContext {
-  client: ModmailClient;
-  message: Message;
-  args: string[];
-  ticket: Ticket | undefined;
-}
-
-export interface Command {
+export interface CommandMeta {
   /**
    * Name of the command
    */
@@ -44,8 +37,19 @@ export interface Command {
     ticketChannelOnly?: boolean;
     allowInArchivedTicketChannel?: boolean;
   };
-  /**
-   * Run function
-   */
-  run: (context: CommandContext) => Promise<void> | void;
+}
+
+/**
+ * Run function
+ */
+export type CommandRunFunction = (context: {
+  client: ModmailClient;
+  message: Message;
+  args: string[];
+  ticket: Ticket | undefined;
+}) => Promise<void> | void;
+
+export interface Command {
+  meta: CommandMeta;
+  run: CommandRunFunction;
 }

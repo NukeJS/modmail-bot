@@ -1,23 +1,22 @@
-import type { Command } from '../types/command';
+import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
-const snippetsCommand: Command = {
+export const meta: CommandMeta = {
   name: 'snippets',
   description: 'Lists all available snippets.',
-  run: async ({ client, message }) => {
-    await message.reply({
-      embeds: [
-        createSimpleEmbed(
-          client.snippets.map((_snippet) => `\`${_snippet.name}\``).join(', ') ||
-            'No snippets found.',
-          {
-            title: 'Available Snippets',
-            type: 'info',
-          },
-        ),
-      ],
-    });
-  },
 };
 
-export default snippetsCommand;
+export const run: CommandRunFunction = async ({ client, message }) => {
+  await message.reply({
+    embeds: [
+      createSimpleEmbed(
+        client.snippets.map((_snippet) => `\`${_snippet.name}\``).join(', ') ||
+          'No snippets found.',
+        {
+          title: 'Available Snippets',
+          type: 'info',
+        },
+      ),
+    ],
+  });
+};

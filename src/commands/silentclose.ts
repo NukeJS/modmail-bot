@@ -1,7 +1,7 @@
-import type { Command } from '../types/command';
+import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
-const silentCloseCommand: Command = {
+export const meta: CommandMeta = {
   name: 'silentclose',
   aliases: ['sc'],
   description:
@@ -10,18 +10,17 @@ const silentCloseCommand: Command = {
     ticketChannelOnly: true,
     allowInArchivedTicketChannel: true,
   },
-  run: async ({ message, ticket }) => {
-    if (!ticket) return;
-
-    await message.reply({
-      embeds: [
-        createSimpleEmbed('Closing ticket...', {
-          type: 'info',
-        }),
-      ],
-    });
-    await message.channel.delete();
-  },
 };
 
-export default silentCloseCommand;
+export const run: CommandRunFunction = async ({ message, ticket }) => {
+  if (!ticket) return;
+
+  await message.reply({
+    embeds: [
+      createSimpleEmbed('Closing ticket...', {
+        type: 'info',
+      }),
+    ],
+  });
+  await message.channel.delete();
+};

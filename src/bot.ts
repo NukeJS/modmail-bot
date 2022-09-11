@@ -37,14 +37,13 @@ export class ModmailClient extends Client {
       (file) => file.endsWith('.js') || file.endsWith('.ts'),
     );
     commandFiles.forEach(async (commandFile) => {
-      const commandImport = await import(`./commands/${commandFile}`);
-      if (!commandImport) return;
+      const command = (await import(`./commands/${commandFile}`)) as Command | undefined;
+      if (!command) return;
 
-      const command: Command = commandImport.default;
-      this.commands.set(command.name || commandFile.split('.')[0], command);
+      this.commands.set(command.meta.name || commandFile.split('.')[0], command);
 
-      if (command.aliases) {
-        command.aliases.forEach((alias) => this.aliases.set(alias, command.name));
+      if (command.meta.aliases) {
+        command.meta.aliases.forEach((alias) => this.aliases.set(alias, command.meta.name));
       }
     });
   }

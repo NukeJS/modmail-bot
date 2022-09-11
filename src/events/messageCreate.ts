@@ -93,22 +93,22 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       client.commands.get(client.aliases.get(cmd.toLowerCase())!);
     if (!command) return;
 
-    if (command.permissions?.ticketChannelOnly && !ticket) {
+    if (command.meta.permissions?.ticketChannelOnly && !ticket) {
       await message.reply({
         embeds: [
           createSimpleEmbed('This command only works inside of a ticket channel.', {
-            type: 'info',
+            type: 'danger',
           }),
         ],
       });
       return;
     }
 
-    if (!command.permissions?.allowInArchivedTicketChannel && ticket?.isArchived) {
+    if (!command.meta.permissions?.allowInArchivedTicketChannel && ticket?.isArchived) {
       await message.reply({
         embeds: [
           createSimpleEmbed("This command doesn't work in archived ticket channels.", {
-            type: 'info',
+            type: 'danger',
           }),
         ],
       });
