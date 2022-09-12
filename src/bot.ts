@@ -1,6 +1,6 @@
 import type { BlockedUser, Snippet, Ticket } from '@prisma/client';
 import { Client, ClientOptions, Collection, Guild } from 'discord.js';
-import fs from 'fs-extra';
+import fg from 'fast-glob';
 import { prisma } from './db';
 import type { Command } from './types/command';
 
@@ -33,14 +33,16 @@ export class ModmailClient extends Client {
   }
 
   private async loadCommands() {
-    const commandFiles = (await fs.readdir(`${__dirname}/commands`)).filter(
-      (file) => file.endsWith('.js') || file.endsWith('.ts'),
-    );
+    const commandFiles = await fg(['src/commands/**/*.{js,ts}'], {
+      objectMode: true,
+      absolute: true,
+    });
+
     commandFiles.forEach(async (commandFile) => {
-      const command = (await import(`./commands/${commandFile}`)) as Command | undefined;
+      const command = (await import(commandFile.path)) as Command | undefined;
       if (!command) return;
 
-      this.commands.set(command.meta.name || commandFile.split('.')[0], command);
+      this.commands.set(command.meta.name || commandFile.name.split('.')[0], command);
 
       if (command.meta.aliases) {
         command.meta.aliases.forEach((alias) => this.aliases.set(alias, command.meta.name));
@@ -49,15 +51,17 @@ export class ModmailClient extends Client {
   }
 
   private async loadEvents() {
-    const eventFiles = (await fs.readdir(`${__dirname}/events`)).filter(
-      (file) => file.endsWith('.js') || file.endsWith('.ts'),
-    );
+    const eventFiles = await fg(['src/events/**/*.{js,ts}'], {
+      objectMode: true,
+      absolute: true,
+    });
+
     eventFiles.forEach(async (eventFile) => {
-      const eventImport = await import(`./events/${eventFile}`);
+      const eventImport = await import(eventFile.path);
       if (!eventImport) return;
 
       const event = eventImport.default;
-      const eventName = eventFile.split('.')[0];
+      const eventName = eventFile.name.split('.')[0];
       this.on(eventName, event.bind(null, this));
     });
   }
