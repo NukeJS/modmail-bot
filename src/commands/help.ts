@@ -22,7 +22,7 @@ export const run: CommandRunFunction = async ({ client, message, args: [name] })
             footer: {
               text: `Type ${prefixed(
                 'help',
-              )} (command) for more information about that specific command.`,
+              )} (command) for more information about a specific command.`,
             },
           },
         ),
