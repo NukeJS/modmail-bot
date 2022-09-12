@@ -1,11 +1,11 @@
-import type { APIEmbed, APIEmbedFooter } from 'discord.js';
+import type { APIEmbed } from 'discord.js';
 import { Colors } from '../constants';
 
 export type SimpleEmbedType = 'success' | 'danger' | 'warning' | 'info';
 
 export interface SimpleEmbedOptions {
-  title?: string;
-  footer?: APIEmbedFooter;
+  title?: APIEmbed['title'];
+  footer?: APIEmbed['footer'];
   type: SimpleEmbedType;
 }
 
