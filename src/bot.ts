@@ -3,6 +3,7 @@ import { Client, ClientOptions, Collection, Guild } from 'discord.js';
 import fg from 'fast-glob';
 import { prisma } from './db';
 import type { Command } from './types/command';
+import { getCommandAliases, getCommandName } from './utils';
 
 export class ModmailClient extends Client {
   commands: Collection<string, Command>;
@@ -42,21 +43,10 @@ export class ModmailClient extends Client {
       const command = (await import(commandFile.path)) as Command | undefined;
       if (!command) return;
 
-      if (command.meta.name) {
-        if (Array.isArray(command.meta.name)) {
-          this.commands.set(command.meta.name[0], command);
+      const commandName = getCommandName(command) || commandFile.name.split('.')[0];
+      this.commands.set(commandName, command);
 
-          const aliases = command.meta.name.slice(1);
-          if (aliases.length) {
-            aliases.forEach((alias) => this.aliases.set(alias, command.meta.name[0]));
-          }
-        } else {
-          this.commands.set(command.meta.name, command);
-        }
-      } else {
-        command.meta.name = commandFile.name.split('.')[0];
-        this.commands.set(command.meta.name, command);
-      }
+      getCommandAliases(command)?.forEach((alias) => this.aliases.set(alias, commandName));
     });
   }
 

@@ -6,11 +6,11 @@ export interface CommandMeta {
   /**
    * Name(s) of the command
    */
-  name: string | string[];
+  name?: string | string[];
   /**
    * Description of the command
    */
-  description: string;
+  description?: string;
   /**
    * Usages of the command
    */

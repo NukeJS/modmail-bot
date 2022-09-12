@@ -1,36 +1,28 @@
 import type { APIEmbed } from 'discord.js';
 import { Colors } from '../constants';
-import type { Command, CommandMeta, CommandRunFunction } from '../types';
-import { createSimpleEmbed } from '../utils';
-
-const getCommandName = (command: Command) => {
-  if (Array.isArray(command.meta.name)) return command.meta.name[0];
-  return command.meta.name;
-};
-
-const getCommandAliases = (command: Command) => {
-  if (Array.isArray(command.meta.name)) return command.meta.name.slice(1);
-  return undefined;
-};
+import type { CommandMeta, CommandRunFunction } from '../types';
+import { createSimpleEmbed, getCommandAliases, getCommandName, prefixed } from '../utils';
 
 export const meta: CommandMeta = {
-  name: ['help', '?'],
+  name: ['help', 'h', '?'],
   description: 'Lists all commands or information about a specific command.',
   usages: ['(command)'],
   examples: ['snippets'],
 };
 
-export const run: CommandRunFunction = async ({ client, message, args: [commandName] }) => {
-  if (!commandName?.length) {
+export const run: CommandRunFunction = async ({ client, message, args: [name] }) => {
+  if (!name?.length) {
     await message.reply({
       embeds: [
         createSimpleEmbed(
-          client.commands.map((_command) => `\`${getCommandName(_command)}\``).join(', '),
+          client.commands.map((command) => `\`${getCommandName(command)}\``).join(', '),
           {
             title: 'Available Commands',
             type: 'info',
             footer: {
-              text: `Type ${process.env.PREFIX}help (command) for more information about that specific command.`,
+              text: `Type ${prefixed(
+                'help',
+              )} (command) for more information about that specific command.`,
             },
           },
         ),
@@ -40,8 +32,8 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
   }
 
   const command =
-    client.commands.get(commandName.toLowerCase()) ||
-    client.commands.get(client.aliases.get(commandName.toLowerCase())!);
+    client.commands.get(name.toLowerCase()) ||
+    client.commands.get(client.aliases.get(name.toLowerCase())!);
   if (!command) {
     await message.reply({
       embeds: [
@@ -53,9 +45,10 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
     return;
   }
 
+  const commandName = getCommandName(command);
   const commandEmbed: APIEmbed = {
     color: Colors.INFO,
-    title: `${process.env.PREFIX}${getCommandName(command)}`,
+    title: `${prefixed(commandName)}`,
     fields: [],
     footer: {
       text: '<> = Required, () = Optional',
@@ -72,21 +65,19 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
   commandEmbed.description = description;
 
   const aliases = getCommandAliases(command);
-  if (aliases?.length) {
+  if (aliases) {
     commandEmbed.fields?.push({
       name: 'Aliases',
-      value: aliases.map((_alias) => `\`${process.env.PREFIX}${_alias}\``).join(', '),
+      value: aliases.map((alias) => `\`${prefixed(alias)}\``).join(', '),
     });
   }
 
   commandEmbed.fields?.push({
     name: 'Usage',
     value: [
-      !command.meta.argsRequired && `\`${process.env.PREFIX}${command.meta.name}\``,
+      !command.meta.argsRequired && `\`${prefixed(commandName)}\``,
       command.meta.usages?.length &&
-        command.meta.usages
-          ?.map((_usage) => `\`${process.env.PREFIX}${command.meta.name} ${_usage}\``)
-          .join('\n'),
+        command.meta.usages?.map((usage) => `\`${prefixed(commandName)} ${usage}\``).join('\n'),
     ]
       .filter(Boolean)
       .join('\n'),
@@ -96,9 +87,9 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
     commandEmbed.fields?.push({
       name: 'Example',
       value: [
-        !command.meta.argsRequired && `\`${process.env.PREFIX}${command.meta.name}\``,
+        !command.meta.argsRequired && `\`${prefixed(commandName)}\``,
         command.meta.examples
-          .map((_example) => `\`${process.env.PREFIX}${command.meta.name} ${_example}\``)
+          .map((example) => `\`${prefixed(commandName)} ${example}\``)
           .join('\n'),
       ]
         .filter(Boolean)
