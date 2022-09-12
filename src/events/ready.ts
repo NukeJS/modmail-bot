@@ -34,6 +34,8 @@ const onReady = async (client: ModmailClient) => {
       },
     },
   });
+
+  console.log('Bot is ready!');
 };
 
 export default onReady;

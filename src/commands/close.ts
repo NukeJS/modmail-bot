@@ -2,8 +2,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed, sendDirectMessage } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'close',
-  aliases: ['c'],
+  name: ['close', 'c'],
   description: 'Close the ticket where the command is used.',
   permissions: {
     ticketChannelOnly: true,

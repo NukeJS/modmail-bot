@@ -4,10 +4,9 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed, getUserByMentionOrId } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'user',
+  name: ['user', 'u'],
   description:
     'Lists information about the specified user.\n\nCan also be used inside of a ticket without specifying a user to list information about the user that created the ticket.',
-  aliases: ['u'],
   usages: ['(user)', '(user id)'],
   examples: ['@Nuke#9476', '237878725130059777'],
   permissions: {

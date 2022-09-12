@@ -2,8 +2,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed, sendDirectMessage } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'snippet',
-  aliases: ['s'],
+  name: ['snippet', 's'],
   description: 'Sends the content of the specified snippet to the user.',
   argsRequired: true,
   usages: ['<name>'],

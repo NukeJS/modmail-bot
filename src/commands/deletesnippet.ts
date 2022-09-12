@@ -3,8 +3,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'deletesnippet',
-  aliases: ['-snippet', '-s'],
+  name: ['deletesnippet', '-snippet', '-s'],
   description: 'Delete a snippet.',
   argsRequired: true,
   usages: ['<name>'],

@@ -2,8 +2,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'silentclose',
-  aliases: ['sc'],
+  name: ['silentclose', 'sc'],
   description:
     "Silently close the ticket where the command is used.\nThis means the user won't receive a message about the ticket being closed.",
   permissions: {

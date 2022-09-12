@@ -2,8 +2,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'previewsnippet',
-  aliases: ['ps'],
+  name: ['previewsnippet', 'ps'],
   description: 'Preview a snippet without sending it to the user.',
   argsRequired: true,
   usages: ['<name>'],

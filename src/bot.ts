@@ -42,10 +42,20 @@ export class ModmailClient extends Client {
       const command = (await import(commandFile.path)) as Command | undefined;
       if (!command) return;
 
-      this.commands.set(command.meta.name || commandFile.name.split('.')[0], command);
+      if (command.meta.name) {
+        if (Array.isArray(command.meta.name)) {
+          this.commands.set(command.meta.name[0], command);
 
-      if (command.meta.aliases) {
-        command.meta.aliases.forEach((alias) => this.aliases.set(alias, command.meta.name));
+          const aliases = command.meta.name.slice(1);
+          if (aliases.length) {
+            aliases.forEach((alias) => this.aliases.set(alias, command.meta.name[0]));
+          }
+        } else {
+          this.commands.set(command.meta.name, command);
+        }
+      } else {
+        command.meta.name = commandFile.name.split('.')[0];
+        this.commands.set(command.meta.name, command);
       }
     });
   }

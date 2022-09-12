@@ -4,13 +4,9 @@ import type { ModmailClient } from '../bot';
 
 export interface CommandMeta {
   /**
-   * Name of the command
+   * Name(s) of the command
    */
-  name: string;
-  /**
-   * Aliases of the command
-   */
-  aliases?: string[];
+  name: string | string[];
   /**
    * Description of the command
    */

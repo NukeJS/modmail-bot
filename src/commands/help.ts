@@ -1,11 +1,20 @@
 import type { APIEmbed } from 'discord.js';
 import { Colors } from '../constants';
-import type { CommandMeta, CommandRunFunction } from '../types';
+import type { Command, CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
+const getCommandName = (command: Command) => {
+  if (Array.isArray(command.meta.name)) return command.meta.name[0];
+  return command.meta.name;
+};
+
+const getCommandAliases = (command: Command) => {
+  if (Array.isArray(command.meta.name)) return command.meta.name.slice(1);
+  return undefined;
+};
+
 export const meta: CommandMeta = {
-  name: 'help',
-  aliases: ['?'],
+  name: ['help', '?'],
   description: 'Lists all commands or information about a specific command.',
   usages: ['(command)'],
   examples: ['snippets'],
@@ -16,7 +25,7 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
     await message.reply({
       embeds: [
         createSimpleEmbed(
-          client.commands.map((_command) => `\`${_command.meta.name}\``).join(', '),
+          client.commands.map((_command) => `\`${getCommandName(_command)}\``).join(', '),
           {
             title: 'Available Commands',
             type: 'info',
@@ -46,7 +55,7 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
 
   const commandEmbed: APIEmbed = {
     color: Colors.INFO,
-    title: `${process.env.PREFIX}${command.meta.name}`,
+    title: `${process.env.PREFIX}${getCommandName(command)}`,
     fields: [],
     footer: {
       text: '<> = Required, () = Optional',
@@ -62,10 +71,11 @@ export const run: CommandRunFunction = async ({ client, message, args: [commandN
   }
   commandEmbed.description = description;
 
-  if (command.meta.aliases?.length) {
+  const aliases = getCommandAliases(command);
+  if (aliases?.length) {
     commandEmbed.fields?.push({
       name: 'Aliases',
-      value: command.meta.aliases.map((_alias) => `\`${process.env.PREFIX}${_alias}\``).join(', '),
+      value: aliases.map((_alias) => `\`${process.env.PREFIX}${_alias}\``).join(', '),
     });
   }
 

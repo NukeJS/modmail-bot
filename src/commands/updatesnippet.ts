@@ -3,8 +3,7 @@ import type { CommandMeta, CommandRunFunction } from '../types';
 import { createSimpleEmbed } from '../utils';
 
 export const meta: CommandMeta = {
-  name: 'updatesnippet',
-  aliases: ['*snippet', '*s'],
+  name: ['updatesnippet', '*snippet', '*s'],
   description: 'Update a existing snippet.',
   argsRequired: true,
   usages: ['<name> <...content>'],
