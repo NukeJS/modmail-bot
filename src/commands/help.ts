@@ -45,10 +45,11 @@ export const run: CommandRunFunction = async ({ client, message, args: [name] })
     return;
   }
 
-  const commandName = getCommandName(command);
+  const prefixedCommandName = prefixed(getCommandName(command));
+
   const commandEmbed: APIEmbed = {
     color: Colors.INFO,
-    title: `${prefixed(commandName)}`,
+    title: `${prefixedCommandName}`,
     fields: [],
     footer: {
       text: '<> = Required, () = Optional',
@@ -75,9 +76,9 @@ export const run: CommandRunFunction = async ({ client, message, args: [name] })
   commandEmbed.fields?.push({
     name: 'Usage',
     value: [
-      !command.meta.argsRequired && `\`${prefixed(commandName)}\``,
+      !command.meta.argsRequired && `\`${prefixedCommandName}\``,
       command.meta.usages?.length &&
-        command.meta.usages?.map((usage) => `\`${prefixed(commandName)} ${usage}\``).join('\n'),
+        command.meta.usages?.map((usage) => `\`${prefixedCommandName} ${usage}\``).join('\n'),
     ]
       .filter(Boolean)
       .join('\n'),
@@ -87,10 +88,8 @@ export const run: CommandRunFunction = async ({ client, message, args: [name] })
     commandEmbed.fields?.push({
       name: 'Example',
       value: [
-        !command.meta.argsRequired && `\`${prefixed(commandName)}\``,
-        command.meta.examples
-          .map((example) => `\`${prefixed(commandName)} ${example}\``)
-          .join('\n'),
+        !command.meta.argsRequired && `\`${prefixedCommandName}\``,
+        command.meta.examples.map((example) => `\`${prefixedCommandName} ${example}\``).join('\n'),
       ]
         .filter(Boolean)
         .join('\n'),
