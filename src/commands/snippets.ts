@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand, defineSubcommand } from '../utils';
+import { createSimpleEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   'snippets',
