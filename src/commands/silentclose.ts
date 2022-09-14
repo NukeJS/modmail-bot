@@ -1,25 +1,26 @@
-import type { CommandMeta, CommandRunFunction } from '../types';
-import { createSimpleEmbed } from '../utils';
+import { createSimpleEmbed, defineCommand } from '../utils';
 
-export const meta: CommandMeta = {
-  name: ['silentclose', 'sc'],
-  description:
-    "Silently close the ticket where the command is used.\nThis means the user won't receive a message about the ticket being closed.",
-  permissions: {
-    ticketChannelOnly: true,
-    allowInArchivedTicketChannel: true,
+export default defineCommand(
+  ['silentclose', 'sc'],
+  {
+    description: `Silently close the ticket where the command is used.
+      This means the user won't receive a message about the ticket being closed.`,
+    usage: [''],
+    permissions: {
+      ticketOnly: true,
+      archivedTicketAllowed: true,
+    },
   },
-};
+  async ({ message, ticket }) => {
+    if (!ticket) return;
 
-export const run: CommandRunFunction = async ({ message, ticket }) => {
-  if (!ticket) return;
-
-  await message.reply({
-    embeds: [
-      createSimpleEmbed('Closing ticket...', {
-        type: 'info',
-      }),
-    ],
-  });
-  await message.channel.delete();
-};
+    await message.reply({
+      embeds: [
+        createSimpleEmbed('Closing ticket...', {
+          type: 'info',
+        }),
+      ],
+    });
+    await message.channel.delete();
+  },
+);

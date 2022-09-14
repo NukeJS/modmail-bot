@@ -40,7 +40,7 @@ export class ModmailClient extends Client {
     });
 
     commandFiles.forEach(async (commandFile) => {
-      const command = (await import(commandFile.path)) as Command | undefined;
+      const command = (await import(commandFile.path))?.default as Command | undefined;
       if (!command) return;
 
       const commandName = getCommandName(command) || commandFile.name.split('.')[0];
@@ -57,10 +57,9 @@ export class ModmailClient extends Client {
     });
 
     eventFiles.forEach(async (eventFile) => {
-      const eventImport = await import(eventFile.path);
-      if (!eventImport) return;
+      const event = (await import(eventFile.path))?.default;
+      if (!event) return;
 
-      const event = eventImport.default;
       const eventName = eventFile.name.split('.')[0];
       this.on(eventName, event.bind(null, this));
     });

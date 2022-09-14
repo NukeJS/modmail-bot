@@ -93,7 +93,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       client.commands.get(client.aliases.get(cmd.toLowerCase())!);
     if (!command) return;
 
-    if (command.meta.permissions?.ticketChannelOnly && !ticket) {
+    if (command.meta.permissions?.ticketOnly && !ticket) {
       await message.reply({
         embeds: [
           createSimpleEmbed('This command only works inside of a ticket channel.', {
@@ -104,7 +104,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       return;
     }
 
-    if (!command.meta.permissions?.allowInArchivedTicketChannel && ticket?.isArchived) {
+    if (!command.meta.permissions?.archivedTicketAllowed && ticket?.isArchived) {
       await message.reply({
         embeds: [
           createSimpleEmbed("This command doesn't work in archived ticket channels.", {
@@ -116,7 +116,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     }
 
     try {
-      await command.run({ client, message, args, ticket });
+      await command.run({ prisma, client, message, args, ticket });
     } catch (error) {
       console.error(error);
 

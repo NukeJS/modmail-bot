@@ -1,4 +1,5 @@
 export * from './createSimpleEmbed';
+export * from './defineCommand';
 export * from './formatTicketMessage';
 export * from './getCommandAliases';
 export * from './getCommandName';

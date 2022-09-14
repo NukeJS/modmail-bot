@@ -8,16 +8,11 @@ const onReady = async (client: ModmailClient) => {
     client.user?.setActivity(status);
   }
 
-  const mainGuild = await getMainGuild();
-  if (!mainGuild) {
-    throw new Error('Bot is not inside of main guild.');
+  const [mainGuild, inboxGuild] = await Promise.all([getMainGuild(), getInboxGuild()]);
+  if (!mainGuild || !inboxGuild) {
+    throw new Error('Bot is not inside of main guild or inbox guild.');
   }
   client.mainGuild = mainGuild;
-
-  const inboxGuild = await getInboxGuild();
-  if (!inboxGuild) {
-    throw new Error('Bot is not inside of inbox guild.');
-  }
   client.inboxGuild = inboxGuild;
 
   const deletedTickets = client.tickets.filter(
