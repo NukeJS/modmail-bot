@@ -4,7 +4,7 @@ import { prisma } from '../db';
 import { defineEmbed, formatTicketMessage, sendDirectMessage } from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
-  if (message.author.bot || message.guildId === process.env.MAIN_SERVER_ID) return;
+  if (message.author.bot) return;
 
   /**
    * Handle DM Message
