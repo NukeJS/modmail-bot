@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand } from '../utils';
+import { defineEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   ['deletesnippet', '-snippet', '-s'],
@@ -7,7 +7,7 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('A name must be provided.', {
+          defineEmbed('A name must be provided.', {
             type: 'danger',
           }),
         ],
@@ -19,7 +19,7 @@ export default defineCommand(
     if (!snippet) {
       await message.reply({
         embeds: [
-          createSimpleEmbed("A snippet with that name doesn't exist.", {
+          defineEmbed("A snippet with that name doesn't exist.", {
             type: 'danger',
           }),
         ],
@@ -35,7 +35,7 @@ export default defineCommand(
     client.snippets.delete(snippet.id);
     await message.reply({
       embeds: [
-        createSimpleEmbed(`Snippet "${name}" has successfully been deleted.`, {
+        defineEmbed(`Snippet \`${name}\` has successfully been deleted.`, {
           type: 'success',
         }),
       ],

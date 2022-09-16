@@ -1,12 +1,6 @@
 import type { APIEmbed } from 'discord.js';
 import { Colors } from '../constants';
-import {
-  createSimpleEmbed,
-  defineCommand,
-  getCommandAliases,
-  getCommandName,
-  prefixed,
-} from '../utils';
+import { defineEmbed, defineCommand, getCommandAliases, getCommandName, prefixed } from '../utils';
 
 export default defineCommand(
   ['help', 'h', '?'],
@@ -19,7 +13,7 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          createSimpleEmbed(
+          defineEmbed(
             client.commands.map((command) => `\`${getCommandName(command)}\``).join(', '),
             {
               title: 'Available Commands',
@@ -42,7 +36,7 @@ export default defineCommand(
     if (!command) {
       await message.reply({
         embeds: [
-          createSimpleEmbed("A command with that name or alias doesn't exist.", {
+          defineEmbed("A command with that name or alias doesn't exist.", {
             type: 'danger',
           }),
         ],
@@ -62,7 +56,7 @@ export default defineCommand(
     };
 
     const description = [
-      command.meta.description,
+      `${command.meta.description}\n`,
       command.meta.permissions?.ticketOnly && '- This command can only be used inside of a ticket.',
       command.meta.permissions?.archivedTicketAllowed &&
         '- This command can be used inside of an archived ticket.',
@@ -83,7 +77,7 @@ export default defineCommand(
       commandEmbed.fields?.push({
         name: 'Usage',
         value: command.meta.usage
-          .map((usage) => `\`${`${prefixedCommandName}${` ${usage}`.trim()}`}\``)
+          .map((usage) => `\`${`${prefixedCommandName} ${`${usage}`}`.trim()}\``)
           .join('\n'),
       });
     }

@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
 
 export default defineCommand(
   'unblock',
@@ -12,7 +12,7 @@ export default defineCommand(
     if (!user) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('User not found.', {
+          defineEmbed('User not found.', {
             type: 'danger',
           }),
         ],
@@ -21,12 +21,12 @@ export default defineCommand(
     }
 
     const existingBlockedUser = client.blockedUsers.find(
-      (_blockedUser) => _blockedUser.userId === user?.id || _blockedUser.userId === ticket?.userId,
+      (blockedUser) => blockedUser.userId === user?.id || blockedUser.userId === ticket?.userId,
     );
     if (!existingBlockedUser) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('User is not blocked.', {
+          defineEmbed('User is not blocked.', {
             type: 'danger',
           }),
         ],
@@ -42,7 +42,7 @@ export default defineCommand(
       }),
       message.reply({
         embeds: [
-          createSimpleEmbed('User has been unblocked.', {
+          defineEmbed('User has been unblocked.', {
             type: 'success',
           }),
         ],

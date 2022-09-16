@@ -16,7 +16,7 @@ const typeToColor: Record<SimpleEmbedType, number> = {
   info: Colors.INFO,
 };
 
-export const createSimpleEmbed = (
+export const defineEmbed = (
   description: string,
   { title, footer, type }: SimpleEmbedOptions,
 ) =>

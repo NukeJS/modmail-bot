@@ -1,7 +1,7 @@
 import { ChannelType, DMChannel, Message, TextChannel } from 'discord.js';
 import type { ModmailClient } from '../bot';
 import { prisma } from '../db';
-import { createSimpleEmbed, formatTicketMessage, sendDirectMessage } from '../utils';
+import { defineEmbed, formatTicketMessage, sendDirectMessage } from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.author.bot || message.guildId === process.env.MAIN_SERVER_ID) return;
@@ -41,7 +41,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       if (process.env.RESPONSE_MESSAGE) {
         await message.channel.send({
           embeds: [
-            createSimpleEmbed(process.env.RESPONSE_MESSAGE, {
+            defineEmbed(process.env.RESPONSE_MESSAGE, {
               type: 'info',
             }),
           ],
@@ -86,6 +86,8 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
       }
     }
 
+    if (!message.content.startsWith(process.env.PREFIX!)) return;
+
     const [cmd, ...args] = message.content.trim().slice(process.env.PREFIX?.length).split(/ +/g);
 
     const command =
@@ -96,7 +98,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     if (command.meta.permissions?.ticketOnly && !ticket) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('This command only works inside of a ticket channel.', {
+          defineEmbed('This command only works inside of a ticket channel.', {
             type: 'danger',
           }),
         ],
@@ -107,7 +109,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     if (!command.meta.permissions?.archivedTicketAllowed && ticket?.isArchived) {
       await message.reply({
         embeds: [
-          createSimpleEmbed("This command doesn't work in archived ticket channels.", {
+          defineEmbed("This command doesn't work in archived ticket channels.", {
             type: 'danger',
           }),
         ],
@@ -122,7 +124,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
       await message.channel.send({
         embeds: [
-          createSimpleEmbed('An error occurred while trying to run the command.', {
+          defineEmbed('An error occurred while trying to run the command.', {
             type: 'danger',
           }),
         ],

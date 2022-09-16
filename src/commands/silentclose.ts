@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand } from '../utils';
+import { defineEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   ['silentclose', 'sc'],
@@ -16,7 +16,7 @@ export default defineCommand(
 
     await message.reply({
       embeds: [
-        createSimpleEmbed('Closing ticket...', {
+        defineEmbed('Closing ticket...', {
           type: 'info',
         }),
       ],

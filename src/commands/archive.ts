@@ -1,5 +1,5 @@
 import { TextChannel } from 'discord.js';
-import { createSimpleEmbed, defineCommand, sendDirectMessage } from '../utils';
+import { defineEmbed, defineCommand, sendDirectMessage } from '../utils';
 
 export default defineCommand(
   'archive',
@@ -31,7 +31,7 @@ export default defineCommand(
 
       sendDirectMessage(message, user, {
         embeds: [
-          createSimpleEmbed('Feel free to open a new one by sending me a message.', {
+          defineEmbed('Feel free to open a new one by sending me a message.', {
             title: 'Ticket Closed',
             type: 'info',
           }),
@@ -42,7 +42,7 @@ export default defineCommand(
 
     await message.reply({
       embeds: [
-        createSimpleEmbed('You can no longer send messages to this user.', {
+        defineEmbed('You can no longer send messages to this user.', {
           title: 'Ticket Archived',
           type: 'success',
         }),

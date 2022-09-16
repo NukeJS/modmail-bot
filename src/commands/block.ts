@@ -1,9 +1,4 @@
-import {
-  createSimpleEmbed,
-  defineCommand,
-  getUserByMentionOrId,
-  sendDirectMessage,
-} from '../utils';
+import { defineEmbed, defineCommand, getUserByMentionOrId, sendDirectMessage } from '../utils';
 
 export default defineCommand(
   'block',
@@ -18,7 +13,7 @@ export default defineCommand(
     if (!user) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('User not found.', {
+          defineEmbed('User not found.', {
             type: 'danger',
           }),
         ],
@@ -32,7 +27,7 @@ export default defineCommand(
     if (existingBlockedUser) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('User is already blocked.', {
+          defineEmbed('User is already blocked.', {
             type: 'danger',
           }),
         ],
@@ -51,7 +46,7 @@ export default defineCommand(
       await Promise.all([
         sendDirectMessage(message, user, {
           embeds: [
-            createSimpleEmbed("You've been blocked.", {
+            defineEmbed("You've been blocked.", {
               title: 'Ticket Closed',
               type: 'info',
             }),
@@ -60,5 +55,12 @@ export default defineCommand(
         message.channel.delete(),
       ]);
     }
+    await message.reply({
+      embeds: [
+        defineEmbed('User has been blocked', {
+          type: 'success',
+        }),
+      ],
+    });
   },
 );

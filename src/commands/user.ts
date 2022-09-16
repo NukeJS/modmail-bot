@@ -1,6 +1,6 @@
 import { formatDistance } from 'date-fns';
 import { Colors } from 'discord.js';
-import { createSimpleEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
 
 export default defineCommand(
   ['user', 'u'],
@@ -18,7 +18,7 @@ export default defineCommand(
     if (args.length && !user) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('User not found.', {
+          defineEmbed('User not found.', {
             type: 'danger',
           }),
         ],

@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand, sendDirectMessage } from '../utils';
+import { defineEmbed, defineCommand, sendDirectMessage } from '../utils';
 
 export default defineCommand(
   ['snippet', 's'],
@@ -16,7 +16,7 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('A name must be provided.', {
+          defineEmbed('A name must be provided.', {
             type: 'danger',
           }),
         ],
@@ -24,11 +24,11 @@ export default defineCommand(
       return;
     }
 
-    const snippet = client.snippets.find((_snippet) => _snippet.name === name);
-    if (!snippet) {
+    const existingSnippet = client.snippets.find((snippet) => snippet.name === name);
+    if (!existingSnippet) {
       await message.reply({
         embeds: [
-          createSimpleEmbed("A snippet with that name doesn't exist.", {
+          defineEmbed("A snippet with that name doesn't exist.", {
             type: 'danger',
           }),
         ],
@@ -40,8 +40,8 @@ export default defineCommand(
     if (!user) return;
 
     await Promise.all([
-      sendDirectMessage(message, user, snippet.content),
-      message.channel.send(snippet.content),
+      sendDirectMessage(message, user, existingSnippet.content),
+      message.channel.send(existingSnippet.content),
     ]);
   },
 );

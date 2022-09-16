@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand } from '../utils';
+import { defineEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   ['addsnippet', '+snippet', '+s'],
@@ -10,7 +10,7 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('A snippet must have a name.', {
+          defineEmbed('A snippet must have a name.', {
             type: 'danger',
           }),
         ],
@@ -20,7 +20,7 @@ export default defineCommand(
     if (!content.length) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('A snippet must have content.', {
+          defineEmbed('A snippet must have content.', {
             type: 'danger',
           }),
         ],
@@ -32,7 +32,7 @@ export default defineCommand(
     if (existingSnippet) {
       await message.reply({
         embeds: [
-          createSimpleEmbed('A snippet with that name already exists.', {
+          defineEmbed('A snippet with that name already exists.', {
             type: 'danger',
           }),
         ],
@@ -49,7 +49,7 @@ export default defineCommand(
     client.snippets.set(snippet.id, snippet);
     await message.reply({
       embeds: [
-        createSimpleEmbed(`Snippet "${name}" has successfully been created.`, {
+        defineEmbed(`Snippet \`${name}\` has successfully been created.`, {
           type: 'success',
         }),
       ],

@@ -1,4 +1,4 @@
-import { createSimpleEmbed, defineCommand } from '../utils';
+import { defineEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   'snippets',
@@ -6,11 +6,11 @@ export default defineCommand(
   async ({ client, message }) => {
     await message.reply({
       embeds: [
-        createSimpleEmbed(
-          client.snippets.map((_snippet) => `\`${_snippet.name}\``).join(', ') ||
+        defineEmbed(
+          client.snippets.map((snippet) => `\`${snippet.name}\``).join(', ') ||
             'No snippets found.',
           {
-            title: 'Available Snippets',
+            title: `Available Snippets (${client.snippets.size})`,
             type: 'info',
           },
         ),

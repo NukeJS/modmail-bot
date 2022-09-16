@@ -4,8 +4,7 @@ A Discord modmail bot made with Discord.js
 
 ## Todos
 
-- [ ] Assign unarchived tickets to a category
-- [ ] Assign archived tickets to a category
+- [ ] Ability to delete messages in a ticket?
 
 ## Installation
 
