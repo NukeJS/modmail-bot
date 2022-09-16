@@ -1,5 +1,3 @@
-import type { APIEmbed } from 'discord.js';
-import { Colors } from '../constants';
 import {
   defineCommand,
   getCommandAliases,
@@ -49,35 +47,31 @@ export default defineCommand(
 
     const prefixedCommandName = prefixed(getCommandName(command));
 
-    const commandEmbed: APIEmbed = {
-      color: Colors.INFO,
-      title: `${prefixedCommandName}`,
-      fields: [],
-      footer: {
-        text: '<> = Required, () = Optional',
-      },
-    };
-
-    const description = [
-      `${command.meta.description}\n`,
-      command.meta.permissions?.ticketOnly && '- This command can only be used inside of a ticket.',
-      command.meta.permissions?.archivedTicketAllowed &&
-        '- This command can be used inside of an archived ticket.',
-    ].filter(Boolean);
-    if (description.length) {
-      commandEmbed.description = description.join('\n');
-    }
+    const commandEmbed = createInfoEmbed()
+      .setTitle(prefixedCommandName)
+      .setDescription(
+        [
+          `${command.meta.description}\n`,
+          command.meta.permissions?.ticketOnly &&
+            '- This command can only be used inside of a ticket.',
+          command.meta.permissions?.archivedTicketAllowed &&
+            '- This command can be used inside of an archived ticket.',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      )
+      .setFooter({ text: '<> = Required, () = Optional' });
 
     const aliases = getCommandAliases(command);
     if (aliases?.length) {
-      commandEmbed.fields?.push({
+      commandEmbed.addFields({
         name: 'Aliases',
         value: aliases.map((alias) => `\`${prefixed(alias)}\``).join(', '),
       });
     }
 
     if (command.meta.usage?.length) {
-      commandEmbed.fields?.push({
+      commandEmbed.addFields({
         name: 'Usage',
         value: command.meta.usage
           .map((usage) => `\`${`${prefixedCommandName} ${`${usage}`}`.trim()}\``)

@@ -2,17 +2,18 @@ import type { Message, MessageOptions, MessagePayload, User } from 'discord.js';
 import { createErrorEmbed } from '.';
 
 export const sendDirectMessage = async (
-  messageByAuthor: Message,
+  message: Message,
   user: User | null | undefined,
-  message: string | MessagePayload | MessageOptions,
+  messageToSend: string | MessagePayload | MessageOptions,
 ) => {
   try {
-    await user?.send(message);
+    await user?.send(messageToSend);
   } catch (error) {
-    await messageByAuthor.reply({
+    await message.reply({
       embeds: [
         createErrorEmbed().setDescription(
-          'Unable to send a DM to this user.\nThey could have blocked me, or have their DMs are turned off.',
+          `Unable to send a DM to this user.
+          They could have blocked me, or have their DMs are turned off.`,
         ),
       ],
     });

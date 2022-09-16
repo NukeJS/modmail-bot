@@ -9,8 +9,7 @@ export default defineCommand(
         createInfoEmbed()
           .setTitle(`Available Snippets (${client.snippets.size})`)
           .setDescription(
-            client.snippets.map((snippet) => `\`${snippet.name}\``).join(', ') ||
-              'No snippets found.',
+            client.snippets.map((snippet) => `\`${snippet.name}\``).join(', ') || 'No snippets.',
           ),
       ],
     });

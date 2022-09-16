@@ -10,8 +10,8 @@ import {
 export default defineCommand(
   'block',
   {
-    description:
-      'Block a user from using the bot.\n\nCan also be used inside of a ticket without specifying a user to block the user that created the ticket.',
+    description: `Block a user from using the bot.
+      Can also be used inside of a ticket without specifying a user to block the user that created the ticket.`,
     usage: ['(user)', '(user id)'],
     // examples: ['@Nuke#9476', '237878725130059777'],
   },
