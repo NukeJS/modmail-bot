@@ -1,6 +1,5 @@
 import { formatDistance } from 'date-fns';
-import { Colors } from 'discord.js';
-import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import { defineCommand, getUserByMentionOrId, createErrorEmbed, createInfoEmbed } from '../utils';
 
 export default defineCommand(
   ['user', 'u'],
@@ -17,11 +16,7 @@ export default defineCommand(
     let user = await getUserByMentionOrId({ message, args, ticket });
     if (args.length && !user) {
       await message.reply({
-        embeds: [
-          defineEmbed('User not found.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User not found.')],
       });
       return;
     }
@@ -32,13 +27,12 @@ export default defineCommand(
 
     await message.reply({
       embeds: [
-        {
-          color: Colors.Blurple,
-          author: {
-            icon_url: user.avatarURL({ size: 32 }) || undefined,
+        createInfoEmbed()
+          .setAuthor({
+            iconURL: user.avatarURL({ size: 32 }) || undefined,
             name: user.tag,
-          },
-          fields: [
+          })
+          .setFields(
             {
               name: 'User ID',
               value: `\`${user.id}\``,
@@ -51,8 +45,7 @@ export default defineCommand(
                 includeSeconds: true,
               }),
             },
-          ],
-        },
+          ),
       ],
     });
   },

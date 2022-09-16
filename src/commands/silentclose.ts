@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand } from '../utils';
+import { defineCommand, createInfoEmbed } from '../utils';
 
 export default defineCommand(
   ['silentclose', 'sc'],
@@ -15,11 +15,7 @@ export default defineCommand(
     if (!ticket) return;
 
     await message.reply({
-      embeds: [
-        defineEmbed('Closing ticket...', {
-          type: 'info',
-        }),
-      ],
+      embeds: [createInfoEmbed().setDescription('Closing ticket...')],
     });
     await message.channel.delete();
   },

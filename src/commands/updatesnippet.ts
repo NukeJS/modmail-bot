@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand } from '../utils';
+import { defineCommand, createErrorEmbed, createSuccessEmbed } from '../utils';
 
 export default defineCommand(
   ['updatesnippet', '*snippet', '*s'],
@@ -11,9 +11,9 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          defineEmbed('You must provide the name of the snippet you wish to update.', {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription(
+            'You must provide the name of the snippet you wish to update.',
+          ),
         ],
       });
       return;
@@ -21,9 +21,7 @@ export default defineCommand(
     if (!content.length) {
       await message.reply({
         embeds: [
-          defineEmbed('You must provide content to update the snippet with.', {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription('You must provide content to update the snippet with.'),
         ],
       });
       return;
@@ -32,11 +30,7 @@ export default defineCommand(
     const existingSnippet = client.snippets.find((snippet) => snippet.name === name);
     if (!existingSnippet) {
       await message.reply({
-        embeds: [
-          defineEmbed("A snippet with that name doesn't exists.", {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription("A snippet with that name doesn't exists.")],
       });
       return;
     }
@@ -59,9 +53,7 @@ export default defineCommand(
     client.snippets.set(snippet!.id, snippet!);
     await message.reply({
       embeds: [
-        defineEmbed(`Snippet \`${name}\` has successfully been updated.`, {
-          type: 'success',
-        }),
+        createSuccessEmbed().setDescription(`Snippet \`${name}\` has successfully been updated.`),
       ],
     });
   },

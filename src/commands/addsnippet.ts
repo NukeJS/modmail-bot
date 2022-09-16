@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand } from '../utils';
+import { createErrorEmbed, createSuccessEmbed, defineCommand } from '../utils';
 
 export default defineCommand(
   ['addsnippet', '+snippet', '+s'],
@@ -9,21 +9,13 @@ export default defineCommand(
   async ({ prisma, client, message, args: [name, ...content] }) => {
     if (!name?.length) {
       await message.reply({
-        embeds: [
-          defineEmbed('A snippet must have a name.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('A snippet must have a name.')],
       });
       return;
     }
     if (!content.length) {
       await message.reply({
-        embeds: [
-          defineEmbed('A snippet must have content.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('A snippet must have content.')],
       });
       return;
     }
@@ -31,11 +23,7 @@ export default defineCommand(
     const existingSnippet = client.snippets.find((snippet) => snippet.name === name);
     if (existingSnippet) {
       await message.reply({
-        embeds: [
-          defineEmbed('A snippet with that name already exists.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('A snippet with that name already exists.')],
       });
       return;
     }
@@ -49,9 +37,7 @@ export default defineCommand(
     client.snippets.set(snippet.id, snippet);
     await message.reply({
       embeds: [
-        defineEmbed(`Snippet \`${name}\` has successfully been created.`, {
-          type: 'success',
-        }),
+        createSuccessEmbed().setDescription(`Snippet \`${name}\` has successfully been created.`),
       ],
     });
   },

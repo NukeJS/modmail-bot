@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand } from '../utils';
+import { defineCommand, createErrorEmbed, createSuccessEmbed } from '../utils';
 
 export default defineCommand(
   ['deletesnippet', '-snippet', '-s'],
@@ -6,11 +6,7 @@ export default defineCommand(
   async ({ prisma, client, message, args: [name] }) => {
     if (!name?.length) {
       await message.reply({
-        embeds: [
-          defineEmbed('A name must be provided.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('A name must be provided.')],
       });
       return;
     }
@@ -18,11 +14,7 @@ export default defineCommand(
     const snippet = client.snippets.find((_snippet) => _snippet.name === name);
     if (!snippet) {
       await message.reply({
-        embeds: [
-          defineEmbed("A snippet with that name doesn't exist.", {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription("A snippet with that name doesn't exist.")],
       });
       return;
     }
@@ -35,9 +27,7 @@ export default defineCommand(
     client.snippets.delete(snippet.id);
     await message.reply({
       embeds: [
-        defineEmbed(`Snippet \`${name}\` has successfully been deleted.`, {
-          type: 'success',
-        }),
+        createSuccessEmbed().setDescription(`Snippet \`${name}\` has successfully been deleted.`),
       ],
     });
   },

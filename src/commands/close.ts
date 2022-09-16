@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand, sendDirectMessage } from '../utils';
+import { defineCommand, sendDirectMessage, createInfoEmbed } from '../utils';
 
 export default defineCommand(
   ['close', 'c'],
@@ -15,11 +15,7 @@ export default defineCommand(
     const user = await client.users.fetch(ticket.userId);
 
     await message.reply({
-      embeds: [
-        defineEmbed('Closing ticket...', {
-          type: 'info',
-        }),
-      ],
+      embeds: [createInfoEmbed().setDescription('Closing ticket...')],
     });
 
     await Promise.all([
@@ -27,10 +23,9 @@ export default defineCommand(
       !ticket.isArchived &&
         sendDirectMessage(message, user, {
           embeds: [
-            defineEmbed('Feel free to open a new one by sending me a message.', {
-              title: 'Ticket Closed',
-              type: 'info',
-            }),
+            createInfoEmbed()
+              .setTitle('Ticket Closed')
+              .setDescription('Feel free to open a new one by sending me a message.'),
           ],
         }),
     ]);

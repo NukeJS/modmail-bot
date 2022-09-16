@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import { defineCommand, getUserByMentionOrId, createErrorEmbed } from '../utils';
 
 export default defineCommand(
   ['userid', 'uid'],
@@ -15,11 +15,7 @@ export default defineCommand(
     let user = await getUserByMentionOrId({ message, args, ticket });
     if (args.length && !user) {
       await message.reply({
-        embeds: [
-          defineEmbed('User not found.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User not found.')],
       });
       return;
     }

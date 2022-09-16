@@ -1,4 +1,11 @@
-import { defineEmbed, defineCommand, getUserByMentionOrId, sendDirectMessage } from '../utils';
+import {
+  createErrorEmbed,
+  createInfoEmbed,
+  createSuccessEmbed,
+  defineCommand,
+  getUserByMentionOrId,
+  sendDirectMessage,
+} from '../utils';
 
 export default defineCommand(
   'block',
@@ -12,11 +19,7 @@ export default defineCommand(
     const user = await getUserByMentionOrId({ message, args, ticket });
     if (!user) {
       await message.reply({
-        embeds: [
-          defineEmbed('User not found.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User not found.')],
       });
       return;
     }
@@ -26,11 +29,7 @@ export default defineCommand(
     );
     if (existingBlockedUser) {
       await message.reply({
-        embeds: [
-          defineEmbed('User is already blocked.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User is already blocked.')],
       });
       return;
     }
@@ -46,21 +45,14 @@ export default defineCommand(
       await Promise.all([
         sendDirectMessage(message, user, {
           embeds: [
-            defineEmbed("You've been blocked.", {
-              title: 'Ticket Closed',
-              type: 'info',
-            }),
+            createInfoEmbed().setTitle('Ticket Closed').setDescription("You've been blocked."),
           ],
         }),
         message.channel.delete(),
       ]);
     }
     await message.reply({
-      embeds: [
-        defineEmbed('User has been blocked', {
-          type: 'success',
-        }),
-      ],
+      embeds: [createSuccessEmbed().setDescription('User has been blocked')],
     });
   },
 );

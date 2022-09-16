@@ -1,7 +1,12 @@
 import { ChannelType, DMChannel, Message, TextChannel } from 'discord.js';
 import type { ModmailClient } from '../bot';
 import { prisma } from '../db';
-import { defineEmbed, formatTicketMessage, sendDirectMessage } from '../utils';
+import {
+  createErrorEmbed,
+  createInfoEmbed,
+  formatTicketMessage,
+  sendDirectMessage,
+} from '../utils';
 
 const onMessageCreate = async (client: ModmailClient, message: Message) => {
   if (message.author.bot) return;
@@ -40,11 +45,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
       if (process.env.RESPONSE_MESSAGE) {
         await message.channel.send({
-          embeds: [
-            defineEmbed(process.env.RESPONSE_MESSAGE, {
-              type: 'info',
-            }),
-          ],
+          embeds: [createInfoEmbed().setDescription(process.env.RESPONSE_MESSAGE)],
         });
       }
     }
@@ -98,9 +99,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     if (command.meta.permissions?.ticketOnly && !ticket) {
       await message.reply({
         embeds: [
-          defineEmbed('This command only works inside of a ticket channel.', {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription('This command only works inside of a ticket channel.'),
         ],
       });
       return;
@@ -109,9 +108,9 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
     if (!command.meta.permissions?.archivedTicketAllowed && ticket?.isArchived) {
       await message.reply({
         embeds: [
-          defineEmbed("This command doesn't work in archived ticket channels.", {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription(
+            "This command doesn't work in archived ticket channels.",
+          ),
         ],
       });
       return;
@@ -124,9 +123,7 @@ const onMessageCreate = async (client: ModmailClient, message: Message) => {
 
       await message.channel.send({
         embeds: [
-          defineEmbed('An error occurred while trying to run the command.', {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription('An error occurred while trying to run the command.'),
         ],
       });
     }

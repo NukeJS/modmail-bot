@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand, sendDirectMessage } from '../utils';
+import { defineCommand, sendDirectMessage, createErrorEmbed } from '../utils';
 
 export default defineCommand(
   ['snippet', 's'],
@@ -15,11 +15,7 @@ export default defineCommand(
 
     if (!name?.length) {
       await message.reply({
-        embeds: [
-          defineEmbed('A name must be provided.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('A name must be provided.')],
       });
       return;
     }
@@ -27,11 +23,7 @@ export default defineCommand(
     const existingSnippet = client.snippets.find((snippet) => snippet.name === name);
     if (!existingSnippet) {
       await message.reply({
-        embeds: [
-          defineEmbed("A snippet with that name doesn't exist.", {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription("A snippet with that name doesn't exist.")],
       });
       return;
     }

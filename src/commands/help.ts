@@ -1,6 +1,13 @@
 import type { APIEmbed } from 'discord.js';
 import { Colors } from '../constants';
-import { defineEmbed, defineCommand, getCommandAliases, getCommandName, prefixed } from '../utils';
+import {
+  defineCommand,
+  getCommandAliases,
+  getCommandName,
+  prefixed,
+  createInfoEmbed,
+  createErrorEmbed,
+} from '../utils';
 
 export default defineCommand(
   ['help', 'h', '?'],
@@ -13,18 +20,16 @@ export default defineCommand(
     if (!name?.length) {
       await message.reply({
         embeds: [
-          defineEmbed(
-            client.commands.map((command) => `\`${getCommandName(command)}\``).join(', '),
-            {
-              title: 'Available Commands',
-              type: 'info',
-              footer: {
-                text: `Type ${prefixed(
-                  'help',
-                )} (command) for more information about a specific command.`,
-              },
-            },
-          ),
+          createInfoEmbed()
+            .setTitle('Available Commands')
+            .setDescription(
+              client.commands.map((command) => `\`${getCommandName(command)}\``).join(', '),
+            )
+            .setFooter({
+              text: `Type ${prefixed(
+                'help',
+              )} (command) for more information about a specific command.`,
+            }),
         ],
       });
       return;
@@ -36,9 +41,7 @@ export default defineCommand(
     if (!command) {
       await message.reply({
         embeds: [
-          defineEmbed("A command with that name or alias doesn't exist.", {
-            type: 'danger',
-          }),
+          createErrorEmbed().setDescription("A command with that name or alias doesn't exist."),
         ],
       });
       return;

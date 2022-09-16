@@ -1,4 +1,4 @@
-import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import { defineCommand, getUserByMentionOrId, createErrorEmbed, createInfoEmbed } from '../utils';
 
 export default defineCommand(
   'blocked',
@@ -11,11 +11,7 @@ export default defineCommand(
     const user = await getUserByMentionOrId({ message, args });
     if (args.length && !user) {
       await message.reply({
-        embeds: [
-          defineEmbed('User not found.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User not found.')],
       });
       return;
     }
@@ -23,13 +19,10 @@ export default defineCommand(
     if (user) {
       await message.reply({
         embeds: [
-          defineEmbed(
+          createInfoEmbed().setDescription(
             client.blockedUsers.find((blockedUser) => blockedUser.userId === user.id)
               ? 'User is blocked.'
               : 'User is not blocked.',
-            {
-              type: 'info',
-            },
           ),
         ],
       });
@@ -38,14 +31,12 @@ export default defineCommand(
 
     await message.reply({
       embeds: [
-        defineEmbed(
-          client.blockedUsers.map((blockedUser) => `\`${blockedUser.userId}\``).join(', ') ||
-            'No blocked users.',
-          {
-            title: `Blocked Users (${client.blockedUsers.size})`,
-            type: 'info',
-          },
-        ),
+        createInfoEmbed()
+          .setTitle(`Blocked Users (${client.blockedUsers.size})`)
+          .setDescription(
+            client.blockedUsers.map((blockedUser) => `\`${blockedUser.userId}\``).join(', ') ||
+              'No blocked users.',
+          ),
       ],
     });
   },

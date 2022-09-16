@@ -1,4 +1,9 @@
-import { defineEmbed, defineCommand, getUserByMentionOrId } from '../utils';
+import {
+  defineCommand,
+  getUserByMentionOrId,
+  createErrorEmbed,
+  createSuccessEmbed,
+} from '../utils';
 
 export default defineCommand(
   'unblock',
@@ -11,11 +16,7 @@ export default defineCommand(
     const user = await getUserByMentionOrId({ message, args, ticket });
     if (!user) {
       await message.reply({
-        embeds: [
-          defineEmbed('User not found.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User not found.')],
       });
       return;
     }
@@ -25,11 +26,7 @@ export default defineCommand(
     );
     if (!existingBlockedUser) {
       await message.reply({
-        embeds: [
-          defineEmbed('User is not blocked.', {
-            type: 'danger',
-          }),
-        ],
+        embeds: [createErrorEmbed().setDescription('User is not blocked.')],
       });
       return;
     }
@@ -41,11 +38,7 @@ export default defineCommand(
         },
       }),
       message.reply({
-        embeds: [
-          defineEmbed('User has been unblocked.', {
-            type: 'success',
-          }),
-        ],
+        embeds: [createSuccessEmbed().setDescription('User has been unblocked.')],
       }),
     ]);
     client.blockedUsers.delete(existingBlockedUser.id);
