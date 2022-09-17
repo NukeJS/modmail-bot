@@ -6,7 +6,7 @@ import {
 } from '../utils';
 
 export default defineCommand(
-  'unblock',
+  ['unblock', 'unblacklist'],
   {
     description: 'Unblock a user.',
     usage: ['<user>', '<user id>'],

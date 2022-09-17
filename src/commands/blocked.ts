@@ -1,7 +1,7 @@
 import { defineCommand, getUserByMentionOrId, createErrorEmbed, createInfoEmbed } from '../utils';
 
 export default defineCommand(
-  'blocked',
+  ['blocked', 'blacklisted'],
   {
     description:
       'Lists all blocked user IDs, or displays whether or not the given user is blocked.',

@@ -8,7 +8,7 @@ import {
 } from '../utils';
 
 export default defineCommand(
-  'block',
+  ['block', 'blacklist'],
   {
     description: `Block a user from using the bot.
       Can also be used inside of a ticket without specifying a user to block the user that created the ticket.`,
