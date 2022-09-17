@@ -31,7 +31,9 @@ export default defineCommand(
       return;
     }
 
-    const existingTicket = client.tickets.find((ticket) => ticket.userId === user.id);
+    const existingTicket = client.tickets.find(
+      (ticket) => ticket.userId === user.id && !ticket.isArchived,
+    );
     if (existingTicket) {
       await message.reply({
         embeds: [
