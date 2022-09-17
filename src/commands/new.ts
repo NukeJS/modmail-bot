@@ -63,7 +63,7 @@ export default defineCommand(
     await message.reply({
       embeds: [
         createSuccessEmbed().setDescription(
-          `Ticket for ${user.tag} has been created in <#${newTicketChannel.id}>.`,
+          `Ticket for **${user.tag}** has been created in <#${newTicketChannel.id}>.`,
         ),
       ],
     });
