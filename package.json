@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/NukeJS/modmail-bot.git",
-  "author": "Ronnie <rwaebers@gmail.com>",
+  "author": "Ronnie <me@nukejs.dev>",
   "license": "MIT",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
